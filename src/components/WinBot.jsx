@@ -1,0 +1,225 @@
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const SENSITIVE_WORDS = [
+  'fuck', 'shit', 'ass', 'bitch', 'cunt', 'dick', 'sex', 'porn', 'kill', 'die', 
+  'stupid', 'idiot', 'damn', 'crap', 'bastard', 'nude', 'slut', 'whore', 'fag', 'gay', 'lesbian'
+];
+
+const BOT_KNOWLEDGE = [
+  {
+    keywords: ['hi', 'hello', 'hey', 'greetings', 'sup', 'bello'],
+    response: "Hello there! I'm WinBot 🤖. I can tell you all about Win's skills, experience, projects, or how to contact him. What would you like to know?"
+  },
+  {
+    keywords: ['skill', 'skills', 'tech', 'stack', 'languages', 'react', 'node', 'javascript', 'html', 'css', 'php', 'laravel'],
+    response: "Win is a full-stack developer! His tech stack includes React, Node.js, JavaScript, TypeScript, Vite, Tailwind CSS, HTML5, CSS3, PHP, MySQL, Express, and Laravel. He also uses tools like Git, GitHub, Docker, and Postman."
+  },
+  {
+    keywords: ['project', 'projects', 'work', 'portfolio', 'ecommerce', 'analytics'],
+    response: "Win has several featured projects, including this responsive Portfolio Website, a Full-stack E-Commerce Platform with Stripe payments, and a Real-time Data Analytics Dashboard using Chart.js. You can find them in the 'Featured Projects' section!"
+  },
+  {
+    keywords: ['contact', 'email', 'hire', 'reach', 'message'],
+    response: "You can reach Win via email at lebantinowin@gmail.com, or connect with him on LinkedIn, GitHub, Facebook, YouTube, or TikTok! Just scroll to the bottom 'Connect' section."
+  },
+  {
+    keywords: ['school', 'education', 'college', 'degree', 'university', 'study', 'graduate'],
+    response: "Win is taking his B.S. in Information Technology at Ilocos Sur Polytechnic State College (Candon Campus). He is a Cum Laude & Valedictorian candidate, and won Best Thesis for 'Smart Hub for Adaptive Digital Engagement'."
+  },
+  {
+    keywords: ['experience', 'job', 'intern', 'work', 'freelance', 'manager'],
+    response: "Win has been a Web Developer Intern at MoodLearning, Inc., a Freelance Digital Services provider since 2021, and also has management and customer service experience as a Manager at Triple G's Water Refilling Station and Waiter at Francisca Francisco's Place."
+  },
+  {
+    keywords: ['about', 'who are you', 'what do you do', 'win'],
+    response: "Win is a passionate full-stack web and mobile developer, and a writer. He loves working with cutting-edge technologies and transforming ideas into engaging digital experiences. And I'm his AI assistant, WinBot!"
+  }
+];
+
+export default function WinBot({ isDarkMode }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { text: "Hi! I'm WinBot 🤖. Ask me anything about Win's portfolio!", isBot: true }
+  ]);
+  const [inputValue, setInputValue] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [messages, isOpen]);
+
+  const processMessage = (input) => {
+    const lowerInput = input.toLowerCase();
+
+    // Check for sensitive words
+    const containsSensitive = SENSITIVE_WORDS.some(word => {
+      // check if the word is an exact word match using regex boundary
+      const regex = new RegExp(`\\b${word}\\b`, 'i');
+      return regex.test(lowerInput);
+    });
+
+    if (containsSensitive) {
+      return "I'm sorry, but I cannot respond to inappropriate language. Please keep the conversation professional and ask me about Win's portfolio! 🛡️";
+    }
+
+    // Check knowledge base
+    for (const rule of BOT_KNOWLEDGE) {
+      if (rule.keywords.some(kw => lowerInput.includes(kw))) {
+        return rule.response;
+      }
+    }
+
+    // Default response
+    return "I'm not exactly sure about that! Try asking me about Win's 'skills', 'projects', 'education', or how to 'contact' him.";
+  };
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    if (!inputValue.trim()) return;
+
+    const userMessage = { text: inputValue, isBot: false };
+    setMessages(prev => [...prev, userMessage]);
+    setInputValue('');
+    setIsTyping(true);
+
+    // Simulate thinking delay
+    setTimeout(() => {
+      const responseText = processMessage(userMessage.text);
+      setMessages(prev => [...prev, { text: responseText, isBot: true }]);
+      setIsTyping(false);
+    }, 600 + Math.random() * 400); // 600-1000ms delay
+  };
+
+  return (
+    <>
+      {/* Floating Toggle Button */}
+      <motion.button
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => setIsOpen(true)}
+        className={`fixed bottom-8 left-8 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center z-50 transition-colors ${
+          isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'
+        } ${isDarkMode ? 'bg-primary text-white hover:bg-primary-hover' : 'bg-primary text-white hover:bg-primary-hover'}`}
+        style={{ boxShadow: '0 8px 32px rgba(59, 130, 246, 0.4)' }}
+      >
+        <i className="fas fa-robot text-2xl" />
+        
+        {/* Unread dot indicator */}
+        {messages.length === 1 && (
+          <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white dark:border-black rounded-full animate-pulse" />
+        )}
+      </motion.button>
+
+      {/* Chat Window */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className={`fixed bottom-8 left-8 w-[350px] h-[500px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 border ${
+              isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+            }`}
+          >
+            {/* Header */}
+            <div className={`px-4 py-3 flex justify-between items-center ${isDarkMode ? 'bg-gray-800 border-b border-gray-700' : 'bg-gray-50 border-b border-gray-200'}`}>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
+                  <i className="fas fa-robot text-sm" />
+                </div>
+                <div>
+                  <h3 className={`font-bold text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>WinBot</h3>
+                  <p className={`text-[10px] ${isDarkMode ? 'text-green-400' : 'text-green-600'} flex items-center gap-1`}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-current" /> Online
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsOpen(false)}
+                className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
+                  isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-gray-500 hover:text-black hover:bg-gray-200'
+                }`}
+              >
+                <i className="fas fa-times text-sm" />
+              </button>
+            </div>
+
+            {/* Messages Area */}
+            <div className={`flex-1 overflow-y-auto p-4 space-y-4 ${isDarkMode ? 'bg-black/50' : 'bg-gray-50/50'}`}>
+              {messages.map((msg, idx) => (
+                <div key={idx} className={`flex ${msg.isBot ? 'justify-start' : 'justify-end'}`}>
+                  <div 
+                    className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${
+                      msg.isBot 
+                        ? isDarkMode 
+                          ? 'bg-gray-800 text-gray-200 rounded-tl-sm' 
+                          : 'bg-white border border-gray-200 text-gray-800 rounded-tl-sm'
+                        : 'bg-primary text-white rounded-tr-sm'
+                    }`}
+                  >
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+              
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm flex items-center gap-1 ${
+                    isDarkMode ? 'bg-gray-800 rounded-tl-sm' : 'bg-white border border-gray-200 rounded-tl-sm'
+                  }`}>
+                    <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" />
+                    <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }} />
+                    <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }} />
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input Area */}
+            <form onSubmit={handleSend} className={`p-3 border-t ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder="Ask me anything..."
+                  className={`w-full rounded-full pl-4 pr-12 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+                    isDarkMode 
+                      ? 'bg-gray-900 text-white placeholder-gray-500 border border-gray-700' 
+                      : 'bg-gray-100 text-gray-900 placeholder-gray-500 border border-transparent'
+                  }`}
+                />
+                <button 
+                  type="submit"
+                  disabled={!inputValue.trim() || isTyping}
+                  className={`absolute right-1 top-1 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                    inputValue.trim() && !isTyping
+                      ? 'bg-primary text-white' 
+                      : isDarkMode ? 'bg-gray-700 text-gray-500' : 'bg-gray-300 text-gray-500'
+                  }`}
+                >
+                  <i className="fas fa-paper-plane text-xs ml-[-1px]" />
+                </button>
+              </div>
+              <div className="text-center mt-2">
+                 <span className={`text-[9px] ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`}>Powered by Simulated NLP</span>
+              </div>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}

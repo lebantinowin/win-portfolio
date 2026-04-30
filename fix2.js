@@ -1,0 +1,101 @@
+const fs = require('fs');
+let content = fs.readFileSync('src/App.jsx', 'utf8');
+
+const targetStr = `              title="Change Language"
+                  setIsLanguageClosing(true);
+                  setTimeout(() => {
+                    setShowLanguagePopup(false);
+                    setIsLanguageClosing(false);
+                  }, 100);
+                }
+                if (showGamePopup) { setIsGameClosing(true); setTimeout(() => { setShowGamePopup(false); setIsGameClosing(false); }, 100); }
+                if (showThemeColorPopup) {
+                  setIsThemeColorClosing(true);
+                  setTimeout(() => {
+                    setShowThemeColorPopup(false);
+                    setIsThemeColorClosing(false);
+                  }, 100);
+                }
+              }`;
+
+const replacementStr = `              title="Change Language"
+            >
+              <FontAwesomeIcon icon={faLanguage} className="text-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
+            </button>
+          </div>
+
+          {/* Game Button (Bottom Left) */}
+          <div 
+            className={\`absolute transition-all duration-300 ease-out delay-[225ms] \${showSettings ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none scale-50'}\`}
+            style={{ transform: showSettings ? 'translate(-50px, 50px)' : 'translate(0, 0)' }}
+          >
+            <button
+              onClick={() => {
+                if (showLanguagePopup) {
+                  setIsLanguageClosing(true);
+                  setTimeout(() => {
+                    setShowLanguagePopup(false);
+                    setIsLanguageClosing(false);
+                  }, 100);
+                }
+                if (showThemeColorPopup) {
+                  setIsThemeColorClosing(true);
+                  setTimeout(() => {
+                    setShowThemeColorPopup(false);
+                    setIsThemeColorClosing(false);
+                  }, 100);
+                }
+                if (showGamePopup) {
+                  setIsGameClosing(true);
+                  setTimeout(() => {
+                    setShowGamePopup(false);
+                    setIsGameClosing(false);
+                  }, 100);
+                } else {
+                  setShowGamePopup(true);
+                }
+              }}
+              className={\`w-11 h-11 rounded-full flex items-center justify-center shadow-2xl transition-all custom-cursor-pointer group \${
+                isDarkMode 
+                  ? 'bg-purple-500 text-white hover:bg-purple-400' 
+                  : 'bg-purple-500 text-white hover:bg-purple-400'
+              }\`}
+              title="Play Games"
+            >
+              <i className="fas fa-gamepad text-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"></i>
+            </button>
+          </div>
+
+          {/* Main Settings Button */}
+          <button
+            onClick={() => {
+              if (showSettings) {
+                if (showLanguagePopup) {
+                  setIsLanguageClosing(true);
+                  setTimeout(() => {
+                    setShowLanguagePopup(false);
+                    setIsLanguageClosing(false);
+                  }, 100);
+                }
+                if (showGamePopup) { 
+                  setIsGameClosing(true); 
+                  setTimeout(() => { 
+                    setShowGamePopup(false); 
+                    setIsGameClosing(false); 
+                  }, 100); 
+                }
+                if (showThemeColorPopup) {
+                  setIsThemeColorClosing(true);
+                  setTimeout(() => {
+                    setShowThemeColorPopup(false);
+                    setIsThemeColorClosing(false);
+                  }, 100);
+                }
+              }`;
+
+// Normalize line endings to avoid mismatch
+content = content.replace(/\r\n/g, '\n');
+content = content.replace(targetStr, replacementStr);
+
+fs.writeFileSync('src/App.jsx', content);
+console.log('Fixed successfully');
