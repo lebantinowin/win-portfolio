@@ -11,7 +11,7 @@ const journeyData = [
     title: 'B.S. Information Technology',
     company: 'Ilocos Sur Polytechnic State College – Candon Campus',
     location: 'Candon City, Ilocos Sur',
-    mapQuery: 'Ilocos+Sur+Polytechnic+State+Campus+Philippines',
+    mapQuery: 'Ilocos+Sur+Polytechnic+State+College+Candon+Campus',
     period: '2022 – 2026',
     icon: 'fas fa-graduation-cap',
     description: [
@@ -24,9 +24,9 @@ const journeyData = [
     id: 1,
     type: 'work',
     title: 'Web Developer Intern',
-    company: 'MoodLearning, Inc.',
-    location: 'UP Diliman, Manila',
-    mapQuery: 'UP+Diliman+Quezon+City+Manila+Philippines',
+    company: 'moodLearning',
+    location: '3/F National Engineering Center, UP Diliman, Quezon City',
+    mapQuery: '14.656938916587091,121.07112220166546',
     period: 'Feb 2026 – Mar 2026',
     icon: 'fas fa-laptop-code',
     description: [
@@ -40,7 +40,7 @@ const journeyData = [
     title: 'Freelancer — Digital Services',
     company: 'Self-employed',
     location: 'Candon City, Ilocos Sur',
-    mapQuery: 'Candon+City+Ilocos+Sur+Philippines',
+    mapQuery: '',
     period: 'Aug 2021 – Present',
     icon: 'fas fa-briefcase',
     description: [
@@ -54,7 +54,7 @@ const journeyData = [
     title: 'Manager',
     company: "Triple G's Water Refilling Station",
     location: 'Candon City, Ilocos Sur',
-    mapQuery: 'Candon+City+Ilocos+Sur+Philippines',
+    mapQuery: 'Candon+City+Ilocos+Sur',
     period: 'Jul 2022 – Aug 2023',
     icon: 'fas fa-store',
     description: [
@@ -67,7 +67,7 @@ const journeyData = [
     title: 'Waiter',
     company: "Francisca Francisco's Place",
     location: 'Candon City, Ilocos Sur',
-    mapQuery: 'Candon+City+Ilocos+Sur+Philippines',
+    mapQuery: '17.184615681532698,120.42565249557309',
     period: 'Jul 2022 – Aug 2023',
     icon: 'fas fa-utensils',
     description: [
@@ -80,7 +80,7 @@ const journeyData = [
     title: 'Secondary Education (Junior & Senior High)',
     company: 'Sta. Lucia Academy',
     location: 'Santa Lucia, Ilocos Sur',
-    mapQuery: 'Sta+Lucia+Academy+Santa+Lucia+Ilocos+Sur+Philippines',
+    mapQuery: 'Sta+Lucia+Academy+Santa+Lucia',
     period: '2016 – 2022',
     icon: 'fas fa-school',
     description: [
@@ -94,7 +94,7 @@ const journeyData = [
     title: 'Primary Education',
     company: 'Calongbuyan Elementary School',
     location: 'Candon City, Ilocos Sur',
-    mapQuery: 'Calongbuyan+Elementary+School+Candon+City+Ilocos+Sur+Philippines',
+    mapQuery: 'Calongbuyan+Elementary+School+Candon+City',
     period: '2010 – 2016',
     icon: 'fas fa-child',
     description: [
@@ -111,19 +111,17 @@ const typeColors = {
     accent: 'var(--color-primary)',
   },
   education: {
-    bg: 'rgba(234,179,8,0.08)',
-    border: 'rgba(234,179,8,0.25)',
+    bg: 'rgba(var(--color-primary-rgb),0.08)',
+    border: 'rgba(var(--color-primary-rgb),0.25)',
     dot: '#eab308',
     accent: '#eab308',
   },
 };
 
 /* ─────────────────── map preview popup (portal) ─────────────────── */
-// Rendered via createPortal → always centred on the real viewport,
-// regardless of any transform/stacking-context on ancestor elements.
 function MapPopup({ item, isDarkMode, onClose }) {
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${item.mapQuery}`;
-  const embedUrl = `https://maps.google.com/maps?q=${item.mapQuery}&output=embed&z=15`;
+  const embedUrl = `https://maps.google.com/maps?q=${item.mapQuery}&output=embed&z=18`;
 
   return createPortal(
     <AnimatePresence>
@@ -240,7 +238,7 @@ function JourneyCard({ item, index, side, isDarkMode, onMapOpen }) {
         }}
       >
         {/* header row */}
-        <div className={`flex flex-wrap items-start gap-3 mb-2 ${side === 'left' ? 'md:flex-row-reverse' : ''}`}>
+        <div className={`flex flex-wrap items-start gap-3 mb-4 ${side === 'left' ? 'md:flex-row-reverse' : ''}`}>
           {/* icon badge */}
           <div
             className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -254,16 +252,22 @@ function JourneyCard({ item, index, side, isDarkMode, onMapOpen }) {
               {item.title}
             </h3>
             {/* company — clickable map trigger */}
-            <button
-              onClick={onMapOpen}
-              className={`group flex items-center gap-1 text-xs md:text-sm font-medium transition-colors hover:text-primary ${
-                side === 'left' ? 'md:flex-row-reverse md:w-full md:justify-start' : ''
-              } ${isDarkMode ? 'text-gray-400 hover:text-primary' : 'text-gray-500 hover:text-primary'}`}
-              title={`View ${item.company} on map`}
-            >
-              <span className="group-hover:underline underline-offset-2 text-left">{item.company}</span>
-              <i className="fas fa-location-dot text-[10px] opacity-50 group-hover:opacity-100 transition-opacity" style={{ color: colors.accent }} />
-            </button>
+            {item.mapQuery ? (
+              <button
+                onClick={onMapOpen}
+                className={`group flex items-center gap-1 text-xs md:text-sm font-medium transition-colors hover:text-primary mt-1 ${
+                  side === 'left' ? 'md:flex-row-reverse md:w-full md:justify-start' : ''
+                } ${isDarkMode ? 'text-gray-400 hover:text-primary' : 'text-gray-500 hover:text-primary'}`}
+                title={`View ${item.company} on map`}
+              >
+                <span className="group-hover:underline underline-offset-2 text-left">{item.company}</span>
+                <i className="fas fa-location-dot text-[10px] opacity-50 group-hover:opacity-100 transition-opacity" style={{ color: colors.accent }} />
+              </button>
+            ) : (
+              <p className={`text-xs md:text-sm font-medium mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                {item.company}
+              </p>
+            )}
             
             {/* MOBILE period pill */}
             <div className={`mt-2 md:hidden ${side === 'left' ? 'flex justify-end' : 'flex justify-start'}`}>
@@ -284,14 +288,6 @@ function JourneyCard({ item, index, side, isDarkMode, onMapOpen }) {
             {item.period}
           </span>
         </div>
-
-        {/* location */}
-        <p className={`text-xs mb-3 flex items-center gap-1 ${
-          side === 'left' ? 'md:flex-row-reverse md:justify-start' : ''
-        } ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`}>
-          <i className="fas fa-map-marker-alt text-[10px]" />
-          {item.location}
-        </p>
 
         {/* bullets */}
         <ul className={`space-y-1.5 ${side === 'left' ? 'md:text-right' : 'text-left'}`}>

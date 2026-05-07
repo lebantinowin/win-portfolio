@@ -219,7 +219,7 @@ body {
 .cursor-dot {
   width: 20px;
   height: 20px;
-  background: #3b82f6;
+  background: var(--color-primary);
   border: 3px solid white;
   border-radius: 50%;
   position: fixed;
@@ -238,7 +238,7 @@ body:not(.dark) .cursor-dot {
 .cursor-echo {
   width: 20px;
   height: 20px;
-  border: 3px solid #3b82f6;
+  border: 3px solid var(--color-primary);
   border-radius: 50%;
   position: fixed;
   pointer-events: none;

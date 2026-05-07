@@ -3,10 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Sidebar from './components/Sidebar';
 import Marquee from './components/Marquee';
 import LoadingScreen from './components/LoadingScreen';
-import HeroBackground from './components/HeroBackground';
+
 import ProjectModal from './components/ProjectModal';
-import Timeline from './components/Timeline';
-import BlogSection from './components/BlogSection';
 import Testimonials from './components/Testimonials';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLanguage } from '@fortawesome/free-solid-svg-icons';
@@ -30,17 +28,12 @@ function App() {
   const [isThemeColorClosing, setIsThemeColorClosing] = useState(false);
   const [language, setLanguage] = useState('english');
   const [navSide, setNavSide] = useState('left');
-  
-  // Easter Egg States
-  const [flipCount, setFlipCount] = useState(0);
-  const [flipDegree, setFlipDegree] = useState(0);
-  const [showWarning, setShowWarning] = useState(false);
-  const [winMessages, setWinMessages] = useState([]);
-  const [isDoomed, setIsDoomed] = useState(false);
   const [activeSocialPopup, setActiveSocialPopup] = useState(null);
   const [socialPopupClosing, setSocialPopupClosing] = useState(false);
   const [emailForm, setEmailForm] = useState({ name: '', email: '', message: '' });
   const [emailStatus, setEmailStatus] = useState({ sending: false, success: false, error: null });
+  const [showShoulderFigures, setShowShoulderFigures] = useState(false);
+
   const greetingsByLanguage = {
     english: 'Hi,',
     tagalog: 'Kamusta,',
@@ -48,28 +41,31 @@ function App() {
     korean: '안녕하세요,',
     minion: 'Bello,'
   };
+  
   const greeting = greetingsByLanguage[language] || greetingsByLanguage.english;
 
   // Translations for all text content
   const translations = {
     english: {
-      tagline: 'Web Developer | Mobile Developer | Writer',
-      seeMyWork: 'See My Work',
-      downloadResume: 'Download Resume',
+      tagline: 'Web Developer | Mobile Developer',
+      seeMyWork: 'Projects',
+      downloadResume: 'Resume',
       aboutTitle: 'About Me',
-      aboutP1: "I'm Win, a passionate full-stack developer with expertise in creating modern web applications. With a strong foundation in React, Node.js, and cloud technologies, I transform ideas into engaging digital experiences.",
-      aboutP2: "I love working with cutting-edge technologies and staying updated with the latest industry trends. When I'm not coding, you can find me exploring new design patterns or contributing to open-source projects.",
+      aboutP1: "I work mostly in full-stack web development — React, Laravel, and MySQL are my main tools.",
+      aboutP2: "I care about building things that actually work and are easy to use. Whether it's a website, a design, or a system — I want it to solve a real problem.",
+      aboutP3: "I’m currently available for full-time remote or freelance work and am always open to new opportunities.",
       years: 'Years',
       projects: 'Projects',
       clients: 'Clients',
       happyClients: 'Happy Clients',
-      featuredProjects: 'Featured Projects',
+      featuredProjects: 'Projects',
       viewProject: 'View Project →',
       letsWorkTogether: "Let's Work Together",
       workTogetherDesc: "I'm always interested in hearing about new projects and opportunities.",
       connect: 'Connect',
       footer: 'All rights reserved.',
-      visits: 'visits'
+      visits: 'visits',
+      certifications: 'Certifications'
     },
     tagalog: {
       tagline: 'Web Developer | Mobile Developer | Manunulat',
@@ -88,7 +84,8 @@ function App() {
       workTogetherDesc: 'Laging interesado akong makarinig tungkol sa bagong mga proyekto at oportunidad.',
       connect: 'Kumonekta',
       footer: 'Lahat ng karapatan ay nakalaan.',
-      visits: 'mga bisita'
+      visits: 'mga bisita',
+      certifications: 'Mga Sertipikasyon'
     },
     japanese: {
       tagline: 'Web開発者 | モバイル開発者 | 作家',
@@ -107,7 +104,8 @@ function App() {
       workTogetherDesc: '新しいプロジェクトや機会について常にお聞きしたいと思っています。',
       connect: '接続',
       footer: '全著作権所有。',
-      visits: 'アクセス'
+      visits: 'アクセス',
+      certifications: '認定資格'
     },
     korean: {
       tagline: '웹 개발자 | 모바일 개발자 | 작가',
@@ -126,10 +124,11 @@ function App() {
       workTogetherDesc: '새로운 프로젝트와 기회에 대해 항상 듣고 싶습니다.',
       connect: '연결',
       footer: '모든 권리 보유.',
-      visits: '방문'
+      visits: '방문',
+      certifications: '자격증'
     },
     minion: {
-      tagline: 'Banana Developer | Banana Mobile | Banana Writer',
+      tagline: 'Banana Developer | Banana Mobile',
       seeMyWork: 'See Banana Work',
       downloadResume: 'Download Banana',
       aboutTitle: 'About Me (Bello!)',
@@ -145,7 +144,8 @@ function App() {
       workTogetherDesc: 'Me always interested in new banana projects and opportunities!',
       connect: 'Connect (Bello!)',
       footer: 'All banana rights reserved.',
-      visits: 'minion visits'
+      visits: 'minion visits',
+      certifications: 'Banana Certifications'
     }
   };
   const t = translations[language] || translations.english;
@@ -157,22 +157,28 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
+
+
+
   useEffect(() => {
     const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 300);
-
-      const sections = ['home', 'about', 'projects', 'contact'];
+      const sections = ['home', 'about', 'projects', 'certifications', 'contact'];
       const viewportCenter = window.innerHeight / 3;
+      let currentSection = 'home';
+      
       for (let section of sections) {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
           if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
+            currentSection = section;
             setActiveSection(section);
             break;
           }
         }
       }
+
+      setShowScrollTop(currentSection === 'contact');
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -209,6 +215,14 @@ function App() {
     setIsDarkMode(initialDark);
     if (initialDark) document.documentElement.classList.add('dark');
     else document.documentElement.classList.remove('dark');
+  }, []);
+
+  // Delay the appearance of the angel/devil figures by 2 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowShoulderFigures(true);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   const hexToRgb = (hex) => {
@@ -358,35 +372,73 @@ function App() {
     { label: t.happyClients,  value: '08', highlight: false }
   ];
 
+  const certificationsList = [
+    {
+      id: 1,
+      title: "Junior React Developer",
+      issuer: "certificates.dev",
+      date: "2026",
+      pdf: "https://certificates.dev/c/a1968457-2c13-44e1-b7a5-032486117553",
+      icon: "https://skillicons.dev/icons?i=react",
+      image: "/react-cert.svg"
+    },
+    {
+      id: 2,
+      title: "Junior Laravel Developer",
+      issuer: "certificates.dev",
+      date: "2026",
+      pdf: "https://certificates.dev/c/a1b457d9-b744-41e9-ad5f-4673bf5d6dbe",
+      icon: "https://skillicons.dev/icons?i=laravel",
+      image: "/laravel-cert.svg"
+    }
+  ];
+
   const frontRow = [
-    { src: '/logos/html5.svg', label: 'HTML5' },
-    { src: '/logos/css3.svg', label: 'CSS3' },
-    { src: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg', label: 'Tailwind' },
-    { src: '/logos/javascript.svg', label: 'JavaScript' },
-    { src: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-original.svg', label: 'PHP' },
-    { src: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg', label: 'MySQL' },
+    { src: 'https://skillicons.dev/icons?i=html', label: 'HTML5' },
+    { src: 'https://skillicons.dev/icons?i=css', label: 'CSS3' },
+    { src: 'https://skillicons.dev/icons?i=js', label: 'JavaScript' },
+    { src: 'https://skillicons.dev/icons?i=tailwind', label: 'Tailwind' },
+    { src: 'https://skillicons.dev/icons?i=php', label: 'PHP' },
+    { src: 'https://skillicons.dev/icons?i=mysql', label: 'MySQL' },
   ];
 
   const backRow = [
-    { src: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/laravel/laravel-original.svg', label: 'Laravel' },
-    { src: '/logos/react.svg', label: 'React' },
-    { src: '/logos/typescript.svg', label: 'TypeScript' },
-    { src: '/logos/vite.svg', label: 'Vite' },
-    { src: '/logos/nodejs.svg', label: 'Node.js' },
-    { src: '/logos/express.svg', label: 'Express' },
+    { src: 'https://skillicons.dev/icons?i=laravel', label: 'Laravel' },
+
+    { src: 'https://skillicons.dev/icons?i=ts', label: 'TypeScript' },
+    { src: 'https://skillicons.dev/icons?i=vite', label: 'Vite' },
+    { src: 'https://skillicons.dev/icons?i=nodejs', label: 'Node.js' },
+    { src: 'https://skillicons.dev/icons?i=express', label: 'Express' },
   ];
 
   const toolsRow = [
-    { src: '/logos/github.svg', label: 'GitHub' },
-    { src: '/logos/git.svg', label: 'Git' },
-    { src: '/logos/docker.svg', label: 'Docker' },
-    { src: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg', label: 'VS Code' },
-    { src: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg', label: 'Postman' },
+    { src: 'https://skillicons.dev/icons?i=github', label: 'GitHub' },
+    { src: 'https://skillicons.dev/icons?i=git', label: 'Git' },
+    { src: 'https://skillicons.dev/icons?i=docker', label: 'Docker' },
+    { src: 'https://skillicons.dev/icons?i=vscode', label: 'VS Code' },
+    { src: 'https://skillicons.dev/icons?i=postman', label: 'Postman' },
   ];
 
   return (
     <div className="font-poppins bg-white text-black dark:bg-black dark:text-white transition-colors duration-300 custom-cursor">
       <div className="noise-overlay"></div>
+      
+      {/* Theme Toggle Pill */}
+      <button
+        onClick={toggleTheme}
+        className={`fixed z-[100] flex items-center justify-between w-[64px] h-[32px] px-1 rounded-full bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-[#2a2a2a] transition-all duration-300 hover:scale-105 shadow-sm
+          left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-8 md:top-6 md:opacity-100 md:pointer-events-auto md:scale-100
+          ${activeSection !== 'home' ? 'top-[50px] opacity-0 pointer-events-none scale-90' : 'top-[72px] opacity-100 pointer-events-auto scale-100'}
+        `}
+        aria-label="Toggle Theme"
+      >
+        <div 
+          className="absolute w-[24px] h-[24px] rounded-full bg-white dark:bg-[#333333] shadow-sm transition-transform duration-300 ease-out"
+          style={{ transform: isDarkMode ? 'translateX(0px)' : 'translateX(30px)' }}
+        ></div>
+        <i className={`fas fa-moon text-[12px] z-10 transition-colors duration-300 w-[24px] text-center ${isDarkMode ? 'text-white' : 'text-gray-400'}`}></i>
+        <i className={`fas fa-sun text-[12px] z-10 transition-colors duration-300 w-[24px] text-center ${!isDarkMode ? 'text-gray-700' : 'text-[#666666]'}`}></i>
+      </button>
       
       <AnimatePresence>
         {isLoading && <LoadingScreen isDarkMode={isDarkMode} />}
@@ -402,137 +454,71 @@ function App() {
       />
 
       {/* Hero Section */}
-      <section id="home" className="relative scroll-mt-24 min-h-screen flex flex-col justify-center items-center text-center px-5 bg-transparent pt-24 md:pt-20 pb-20 overflow-hidden">
-        <HeroBackground isDarkMode={isDarkMode} />
-        {/* Hero picture wrapper — message floats ABOVE in absolute, never shifts layout */}
-        <div className="relative z-10 mb-8 flex flex-col items-center" style={{ perspective: '1000px' }}>
-
-          {/* Scattered speech bubbles — absolutely positioned around image */}
-          <AnimatePresence>
-            {!showWarning && winMessages.map((msg) => (
-              <motion.div
-                key={msg.id}
-                initial={{ opacity: 0, scale: 0.3 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.3 }}
-                transition={{ type: 'spring', stiffness: 600, damping: 22 }}
-                className="absolute z-30 pointer-events-none"
-                style={{ top: msg.y, left: msg.x, transform: 'translate(-50%, -50%)' }}
-              >
-                <div className="relative bg-white text-black px-3 py-1.5 rounded-2xl text-xs font-bold shadow-2xl text-center border border-gray-200 whitespace-nowrap">
-                  {msg.text}
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-
-          <AnimatePresence mode="wait">
-            {!showWarning ? (
-              <motion.div
-                key="hero-image-wrap"
-                className="cursor-pointer relative inline-block"
-                exit={{ scale: 0, opacity: 0, rotateZ: 720, transition: { duration: 0.9, ease: 'easeInOut' } }}
-                onClick={() => {
-                  if (showWarning || flipCount >= 6) return;
-                  const newCount = flipCount + 1;
-                  setFlipCount(newCount);
-                  setFlipDegree(prev => prev + 360);
-
-                  const messagesByCount = [
-                    "Hey, stop flipping me! 😵",
-                    "Please don't flip me again 😵",
-                    "Oh you better stop! 😠",
-                    "I'm warning you... 😠",
-                    "Last warning! 😡",
-                    "I'm gonna find you! 😡",
-                  ];
-                  const text = messagesByCount[newCount - 1];
-
-                  // Random position scattered around the image (224x224px)
-                  const angles = [315, 45, 270, 90, 225, 135];
-                  const angle = (angles[newCount - 1] + (Math.random() * 30 - 15)) * (Math.PI / 180);
-                  const radius = 130 + Math.random() * 20;
-                  const cx = 112; // center of 224px image
-                  const cy = 112;
-                  const x = cx + Math.cos(angle) * radius;
-                  const y = cy + Math.sin(angle) * radius;
-
-                  const id = Date.now();
-                  setWinMessages(prev => [...prev, { id, text, x, y }]);
-                  setTimeout(() => {
-                    setWinMessages(prev => prev.filter(m => m.id !== id));
-                  }, 3000);
-
-                  if (newCount === 6) {
-                    setTimeout(() => setShowWarning(true), 1500);
-                  }
+      <section id="home" className="relative scroll-mt-24 min-h-[85vh] flex flex-col justify-center items-center px-5 bg-transparent pt-24 md:pt-16 pb-12 overflow-hidden">
+        <div className="max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center justify-center gap-0 md:gap-16">
+          
+          {/* Left Column: Picture */}
+          <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full mt-6 md:mt-0">
+            <motion.div
+              className="relative inline-block w-full text-center"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+            >
+              <img
+                src="/win.svg"
+                alt="Win Logo"
+                style={{ 
+                  WebkitMaskImage: 'linear-gradient(to bottom, black 65%, transparent 100%)',
+                  maskImage: 'linear-gradient(to bottom, black 65%, transparent 100%)'
                 }}
-              >
-                <motion.img
-                  src="/win.svg"
-                  alt="Win Logo"
-                  animate={{ rotateY: flipDegree }}
-                  transition={{ type: 'spring', stiffness: 80, damping: 12, mass: 1.2 }}
-                  style={{ transformStyle: 'preserve-3d' }}
-                  className={`w-56 h-56 rounded-full shadow-2xl mx-auto mb-6 object-cover border-4 border-white/10 transition-[filter] duration-500 ${
-                    flipCount >= 3 ? 'sepia-[.5] blur-[1px]' : ''
-                  } ${
-                    flipCount >= 5 ? 'sepia-[1] brightness-50 hue-rotate-[-50deg]' : ''
-                  }`}
-                />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="hero-warning"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 18 }}
-                className="w-56 h-56 mx-auto mb-6 flex flex-col items-center justify-center bg-red-900/80 rounded-full border border-red-500 shadow-[0_0_50px_rgba(239,68,68,0.8)] p-6 relative overflow-hidden"
-              >
-                {!isDoomed ? (
-                  <>
-                    <p className="text-red-400 font-bold text-center mb-4 leading-tight text-xs">
-                      You angered Win and he decided to come for you...be ready.
-                    </p>
-                    <p className="text-white text-sm font-bold mb-3">Are you sorry?</p>
-                    <div className="flex gap-3 relative z-10">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setFlipCount(0);
-                          setFlipDegree(0);
-                          setShowWarning(false);
-                          setIsDoomed(false);
-                          const id = Date.now();
-                          setWinMessages([{ id, text: "Apology accepted 😌", x: 112, y: -20 }]);
-                          setTimeout(() => setWinMessages([]), 3000);
-                        }}
-                        className="px-3 py-1 bg-green-500 hover:bg-green-400 text-white rounded font-bold text-sm transition-transform hover:scale-105"
-                      >Yes</button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setIsDoomed(true);
-                        }}
-                        className="px-3 py-1 bg-gray-800 hover:bg-gray-700 text-white rounded font-bold text-sm transition-transform hover:scale-105"
-                      >No</button>
-                    </div>
-                  </>
-                ) : (
-                  <motion.p
-                    animate={{ scale: [1, 1.05, 1] }}
-                    transition={{ repeat: Infinity, duration: 0.5 }}
-                    className="text-red-500 font-black text-center text-sm uppercase"
+                className="w-full max-w-[400px] md:max-w-[600px] lg:max-w-[750px] h-auto mx-auto object-contain drop-shadow-2xl -mb-4 md:mb-0 relative z-10"
+              />
+              
+              {/* Angel (Frontend) - Left */}
+              <AnimatePresence>
+                {showShoulderFigures && (
+                  <motion.div
+                    className="absolute top-[25%] sm:top-[20%] left-0 sm:left-4 md:-left-4 z-20 flex flex-col items-center"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: [0, -10, 0] }}
+                    exit={{ opacity: 0 }}
+                    transition={{ 
+                      opacity: { duration: 0.5 },
+                      y: { repeat: Infinity, duration: 3, ease: "easeInOut" } 
+                    }}
                   >
-                    Close your windows and lock your doors. 💀
-                  </motion.p>
+                    <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-blue-500 font-black text-[10px] sm:text-xs tracking-widest whitespace-nowrap">FRONTEND!</span>
+                    <img src="/angel.svg" alt="Frontend Angel" className="w-20 sm:w-28 md:w-32 h-auto drop-shadow-xl" />
+                  </motion.div>
                 )}
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </AnimatePresence>
+
+              {/* Devil (Backend) - Right */}
+              <AnimatePresence>
+                {showShoulderFigures && (
+                  <motion.div
+                    className="absolute top-[25%] sm:top-[20%] right-0 sm:right-4 md:-right-4 z-20 flex flex-col items-center"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: [0, -10, 0] }}
+                    exit={{ opacity: 0 }}
+                    transition={{ 
+                      opacity: { duration: 0.5 },
+                      y: { repeat: Infinity, duration: 3, ease: "easeInOut", delay: 0.5 } 
+                    }}
+                  >
+                    <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-red-500 font-black text-[10px] sm:text-xs tracking-widest whitespace-nowrap">BACKEND!</span>
+                    <img src="/devil.svg" alt="Backend Devil" className="w-20 sm:w-28 md:w-32 h-auto drop-shadow-xl" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
         </div>
-        <motion.h1 
-          className="relative z-10 text-5xl md:text-6xl font-black mb-3 leading-tight"
+
+        {/* Right Column: Text */}
+        <div className="flex-1 flex flex-col items-center justify-center text-center w-full mt-0 md:mt-12">
+          <motion.h1 
+            className="relative z-10 text-5xl md:text-7xl font-black mb-2 leading-tight"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -540,7 +526,7 @@ function App() {
           {greeting}&nbsp;I'm <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Win</span>
         </motion.h1>
         <motion.p 
-          className={`relative z-10 text-lg md:text-xl ${isDarkMode ? 'text-gray-400' : 'text-gray-700'} mb-8 max-w-2xl font-light`}
+          className={`relative z-10 text-sm sm:text-base md:text-2xl whitespace-nowrap ${isDarkMode ? 'text-gray-400' : 'text-gray-700'} mb-5 max-w-2xl font-light`}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
@@ -548,74 +534,178 @@ function App() {
           {t.tagline}
         </motion.p>
         <motion.div 
-          className="relative z-10 flex gap-3 sm:gap-4 justify-center"
+          className="relative z-10 flex flex-wrap gap-3 sm:gap-4 justify-center"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          <a href="#projects" className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 rounded-full border-2 border-primary text-white bg-primary-hover hover:bg-primary-hover transition-all font-semibold">
-            <i className="fas fa-arrow-right"></i> <span className="hidden sm:inline">{t.seeMyWork}</span>
+          <a href="#projects" className="inline-flex items-center gap-2 px-4 py-1.5 text-sm rounded-full border-2 border-primary text-white bg-primary-hover hover:bg-primary-hover transition-all font-semibold">
+            <i className="fas fa-arrow-right text-xs"></i> 
+            <span className="hidden sm:inline">Explore Projects</span>
+            <span className="inline sm:hidden">Projects</span>
           </a>
-          <button onClick={downloadResume} className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 rounded-full border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-black transition-all font-semibold">
-            <i className="fas fa-download"></i> <span className="hidden sm:inline">{t.downloadResume}</span>
+          <button onClick={downloadResume} className="inline-flex items-center gap-2 px-4 py-1.5 text-sm rounded-full border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-black transition-all font-semibold">
+            <i className="fas fa-download text-xs"></i> 
+            <span className="hidden sm:inline">Download Resume</span>
+            <span className="inline sm:hidden">Resume</span>
           </button>
         </motion.div>
+
         <motion.div 
-          className="relative z-10 mt-8 md:absolute md:bottom-8 animate-bounce"
+          className="relative z-10 block md:hidden mt-8 mb-8 animate-bounce w-full text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}
         >
-          <span className="text-gray-500 text-sm">↓ Scroll to explore</span>
+          <span className="text-gray-500 text-[10px] whitespace-nowrap tracking-widest uppercase">Scroll to explore</span>
         </motion.div>
-      </section>
 
-      {/* Tech Stack Marquee */}
-      <section id="services" className="scroll-mt-24 py-16 px-5 bg-white dark:bg-black">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-6">
-            <Marquee items={frontRow} speed={60} />
-          </div>
-          <div className="mb-6">
-            <Marquee items={backRow} speed={48} reverse />
-          </div>
-          <div>
-            <Marquee items={toolsRow} speed={72} />
-          </div>
+        {/* Tech Stack inside Hero */}
+        <div className="relative z-10 w-full mt-2 md:mt-8 max-w-[65vw] md:max-w-xs mx-auto">
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+          >
+            <div className="mb-3">
+              <Marquee items={frontRow} speed={60} />
+            </div>
+            <div className="mb-3">
+              <Marquee items={backRow} speed={48} reverse />
+            </div>
+          </motion.div>
         </div>
+
+        </div>
+        </div>
+
+        <motion.div 
+          className="relative z-10 hidden md:block mt-8 mb-4 animate-bounce w-full text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1 }}
+        >
+          <span className="text-gray-500 text-[10px] whitespace-nowrap tracking-widest uppercase">Scroll to explore</span>
+        </motion.div>
       </section>
 
       {/* About Section */}
       <section id="about" className="scroll-mt-24 py-20 px-5 bg-white dark:bg-black">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <h2 className={`text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 ${isDarkMode ? 'text-white' : 'text-black'}`}>
             <i className="fas fa-user-circle text-primary mr-2"></i> {t.aboutTitle}
           </h2>
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <div className="space-y-4">
-              <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-lg leading-relaxed text-justify`}>
-                {t.aboutP1}
+          
+          {/* Centered Paragraphs */}
+          <div className="space-y-6 mb-20 text-center">
+            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-lg leading-relaxed`}>
+              {t.aboutP1}
+            </p>
+            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-lg leading-relaxed`}>
+              {t.aboutP2}
+            </p>
+            {t.aboutP3 && (
+              <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-lg leading-relaxed`}>
+                {t.aboutP3}
               </p>
-              <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-lg leading-relaxed text-justify`}>
-                {t.aboutP2}
-              </p>
-            </div>
+            )}
+          </div>
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              {getStats().map((stat, index) => (
+          {/* Certifications Subsection */}
+          <div className="mb-20">
+            <h3 className={`text-2xl md:text-3xl font-bold text-center mb-8 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+              <i className="fas fa-certificate text-primary mr-2"></i> {t.certifications}
+            </h3>
+            <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+              {certificationsList.map(cert => (
                 <div
-                  key={index}
-                  className={`p-6 rounded-lg text-center transition-all ${
-                    stat.highlight
-                      ? 'bg-primary text-white scale-105 shadow-2xl shadow-primary/50'
-                      : 'bg-white text-gray-900 dark:bg-black dark:text-gray-300 border border-gray-800 hover:border-gray-700'
-                  }`}
+                  key={cert.id}
+                  className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden group"
                 >
-                  <div className="text-3xl font-bold mb-1">{stat.value}</div>
-                  <div className="text-sm font-medium">{stat.label}</div>
+                  {cert.image && (
+                    <div className="w-full border-b border-gray-100 dark:border-gray-800 overflow-hidden">
+                      <img src={cert.image} alt={cert.title} className="w-full h-auto block transition-transform duration-500 group-hover:scale-105" />
+                    </div>
+                  )}
+                  <div className="p-6 flex items-center gap-4 flex-grow">
+                    {cert.icon && (
+                      <div className="w-12 h-12 shrink-0 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700">
+                        <img src={cert.icon} alt={cert.title} className="w-6 h-6 object-contain drop-shadow-md" />
+                      </div>
+                    )}
+                    <div>
+                      <a
+                        href={cert.pdf}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`text-base font-bold mb-1 leading-tight hover:underline underline-offset-2 ${isDarkMode ? 'text-white hover:text-primary' : 'text-black hover:text-primary'}`}
+                      >
+                        {cert.title}
+                      </a>
+                      <p className={`text-sm font-medium ${isDarkMode ? 'text-primary' : 'text-primary-hover'}`}>{cert.issuer}</p>
+                      <p className={`text-xs mt-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}><i className="far fa-calendar-alt mr-1"></i>{cert.date}</p>
+                    </div>
+                  </div>
                 </div>
               ))}
+            </div>
+            <div className="mt-8 text-center">
+              <a 
+                href="https://drive.google.com/drive/folders/1frL2z-wbgw1D-Yhp4h5MyPeU6T8sjS1f?usp=drive_link" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`inline-flex items-center gap-2 text-sm font-medium transition-colors hover:underline ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-black'}`}
+              >
+                Explore my other Certificates and Achievements <i className="fas fa-arrow-right text-xs"></i>
+              </a>
+            </div>
+          </div>
+
+          {/* My Teams Subsection */}
+          <div>
+            <h3 className={`text-2xl md:text-3xl font-bold text-center mb-8 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+              <i className="fas fa-users text-primary mr-2"></i> My Teams
+            </h3>
+            <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+              {/* ECCENTRI */}
+              <div className="bg-gray-50 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-800 rounded-xl p-8 flex flex-col items-center text-center hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 group">
+                <img src="/ECCENTRI.svg" alt="ECCENTRI" className="w-24 h-24 mb-6 object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300" />
+                <h4 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>ECCENTRI</h4>
+                <div className="mb-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold uppercase tracking-wider">
+                  <i className="fas fa-crown"></i> Founder & Leader
+                </div>
+                <p className={`text-sm mb-6 flex-grow leading-relaxed ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Eccentri is an Information Technology Solutions which their service expertise is Tabulation Service, Live Coverage/Streaming, and Photography.
+                </p>
+                <a 
+                  href="https://www.facebook.com/profile.php?id=61585146655957" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white dark:hover:text-black transition-all font-semibold text-sm"
+                >
+                  <i className="fab fa-facebook-f"></i> Visit Page
+                </a>
+              </div>
+
+              {/* NEXUS LEAGUE */}
+              <div className="bg-gray-50 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-800 rounded-xl p-8 flex flex-col items-center text-center hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 group">
+                <img src="/NEXUSLEAGUE.svg" alt="NEXUS LEAGUE" className="w-24 h-24 mb-6 object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300" />
+                <h4 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>NEXUS LEAGUE</h4>
+                <div className="mb-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold uppercase tracking-wider">
+                  <i className="fas fa-crown"></i> Founder & Leader
+                </div>
+                <p className={`text-sm mb-6 flex-grow leading-relaxed ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Nexus League is a dynamic community of multimedia and gaming enthusiasts, founded on a shared passion for multimedia and competitive gaming.
+                </p>
+                <a 
+                  href="https://www.facebook.com/profile.php?id=100086407458832" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white dark:hover:text-black transition-all font-semibold text-sm"
+                >
+                  <i className="fab fa-facebook-f"></i> Visit Page
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -658,25 +748,6 @@ function App() {
         </div>
       </section>
 
-      {/* Journey Timeline Section */}
-      <section id="experience" className="py-20 px-5 bg-white dark:bg-black border-t border-gray-100 dark:border-gray-800">
-        <div className="max-w-6xl mx-auto">
-          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-            <i className="fas fa-route text-primary mr-2"></i> Journey
-          </h2>
-          <Timeline isDarkMode={isDarkMode} />
-        </div>
-      </section>
-
-      {/* Blog Section */}
-      <section id="blog" className="py-20 px-5 bg-gray-50 dark:bg-gray-900/30">
-        <div className="max-w-6xl mx-auto">
-          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-            <i className="fas fa-pen-nib text-primary mr-2"></i> Writer's Corner
-          </h2>
-          <BlogSection isDarkMode={isDarkMode} />
-        </div>
-      </section>
 
       {/* Testimonials Section */}
       <section id="testimonials" className="py-20 px-5 bg-white dark:bg-black">
@@ -688,49 +759,90 @@ function App() {
         </div>
       </section>
 
+
+
       {/* Contact Section */}
       <section id="contact" className="scroll-mt-24 py-20 px-5 bg-white dark:bg-black border-t border-gray-100 dark:border-gray-800">
         <div className="max-w-6xl mx-auto">
-          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-2 md:mb-3 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-            <i className="fas fa-envelope text-primary mr-2"></i> {t.letsWorkTogether}
+          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 ${isDarkMode ? 'text-white' : 'text-black'}`}>
+            <i className="fas fa-envelope text-primary mr-2"></i> Contact
           </h2>
-          <p className={`text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-700'} mb-12 text-lg`}>
-            {t.workTogetherDesc}
-          </p>
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center">
-              <h4 className="text-secondary font-bold mb-6">
-                <i className="fas fa-share-nodes text-primary mr-2"></i> {t.connect}
-              </h4>
-              <div className="flex justify-center gap-3">
-                {[
-                  { id: 'gmail', icon: 'fas fa-envelope' },
-                  { id: 'linkedin', icon: 'fab fa-linkedin-in' },
-                  { id: 'github', icon: 'fab fa-github' },
-                  { id: 'youtube', icon: 'fab fa-youtube' },
-                  { id: 'facebook', icon: 'fab fa-facebook-f' },
-                  { id: 'tiktok', icon: 'fab fa-tiktok' }
-                ].map((social) => (
-                  <button
-                    key={social.id}
-                    onClick={() => {
-                      if (activeSocialPopup === social.id) {
-                        setSocialPopupClosing(true);
-                        setTimeout(() => {
-                          setActiveSocialPopup(null);
-                          setSocialPopupClosing(false);
-                        }, 100);
-                      } else {
-                        setActiveSocialPopup(social.id);
-                      }
-                    }}
-                    className={`w-11 h-11 rounded-full border-2 flex items-center justify-center transition-all group ${isDarkMode ? 'border-white text-white hover:bg-white hover:text-black' : 'border-black text-black hover:bg-black hover:text-white'}`}
-                    title={social.id}
-                  >
-                    <i className={`${social.icon} transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12`}></i>
-                  </button>
-                ))}
+          
+          <div className="max-w-xl mx-auto">
+            {/* Email Form Card */}
+            <div className="bg-gray-50 dark:bg-gray-900/50 p-8 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-xl">
+              <div className="text-center mb-6">
+                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary text-xl mx-auto mb-3">
+                  <i className="fas fa-paper-plane"></i>
+                </div>
+                <h4 className={`font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>Send Email</h4>
+                <p className="text-primary font-medium text-sm">lebantinowin@gmail.com</p>
               </div>
+
+              {emailStatus.success ? (
+                <div className="text-center py-10">
+                  <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i className="fas fa-check"></i>
+                  </div>
+                  <h3 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>Message Sent!</h3>
+                  <p className="text-gray-500 mb-6 text-sm">I'll get back to you as soon as possible.</p>
+                  <button 
+                    onClick={() => setEmailStatus({ sending: false, success: false, error: null })}
+                    className="px-6 py-2 bg-primary text-white rounded-full font-bold hover:bg-primary-hover transition-all"
+                  >
+                    Send Another
+                  </button>
+                </div>
+              ) : (
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setEmailStatus({ sending: true, success: false, error: null });
+                    emailjs.send('service_89sdixq', 'template_ww814ql', {
+                      from_name: emailForm.name,
+                      from_email: emailForm.email,
+                      message: emailForm.message,
+                      to_email: 'lebantinowin@gmail.com',
+                    }, 'lZfWFIu7y2Hb2-m1f')
+                    .then(() => setEmailStatus({ sending: false, success: true, error: null }))
+                    .catch((err) => setEmailStatus({ sending: false, success: false, error: err.text }));
+                  }}
+                  className="space-y-4"
+                >
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    required
+                    className={`w-full px-4 py-3 rounded-xl border ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200 text-black'} focus:outline-none focus:ring-2 focus:ring-primary`}
+                    value={emailForm.name}
+                    onChange={(e) => setEmailForm({...emailForm, name: e.target.value})}
+                  />
+                  <input
+                    type="email"
+                    placeholder="Your Email"
+                    required
+                    className={`w-full px-4 py-3 rounded-xl border ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200 text-black'} focus:outline-none focus:ring-2 focus:ring-primary`}
+                    value={emailForm.email}
+                    onChange={(e) => setEmailForm({...emailForm, email: e.target.value})}
+                  />
+                  <textarea
+                    placeholder="Your Message"
+                    required
+                    rows={4}
+                    className={`w-full px-4 py-3 rounded-xl border ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200 text-black'} focus:outline-none focus:ring-2 focus:ring-primary resize-none`}
+                    value={emailForm.message}
+                    onChange={(e) => setEmailForm({...emailForm, message: e.target.value})}
+                  />
+                  <button
+                    type="submit"
+                    disabled={emailStatus.sending}
+                    className="w-full py-4 bg-primary text-white rounded-xl font-bold hover:bg-primary-hover transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    {emailStatus.sending ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-paper-plane"></i>}
+                    Send Email
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>
@@ -987,19 +1099,94 @@ function App() {
       )}
 
       {/* Footer */}
-      <footer className="bg-white dark:bg-black border-t border-gray-800 py-8 px-5 text-center text-gray-600 dark:text-gray-400 font-medium">
-        <div className="max-w-6xl mx-auto flex flex-col items-center gap-4">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 text-primary" fill="currentColor">
-              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-            </svg>
-            <span className="text-primary font-semibold">
-              {visitCount !== null ? visitCount.toLocaleString() : '...'} {t.visits}
-            </span>
+      <footer className="bg-white dark:bg-black border-t border-gray-100 dark:border-gray-900 py-10 px-5">
+        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-8 text-[10px] sm:text-xs font-medium text-gray-500 dark:text-gray-400">
+          
+          {/* Row 1: Connect & Socials */}
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex items-center gap-2">
+              <i className="fas fa-share-nodes text-primary text-[10px]"></i>
+              <span className="font-bold uppercase tracking-widest text-[9px]">Connect</span>
+            </div>
+            <div className="flex items-center gap-5">
+              {[
+                { id: 'linkedin', icon: 'fab fa-linkedin-in' },
+                { id: 'github', icon: 'fab fa-github' },
+                { id: 'youtube', icon: 'fab fa-youtube' },
+                { id: 'facebook', icon: 'fab fa-facebook-f' },
+                { id: 'tiktok', icon: 'fab fa-tiktok' }
+              ].map((social) => (
+                <button
+                  key={social.id}
+                  onClick={() => setActiveSocialPopup(social.id)}
+                  className="hover:text-primary transition-colors cursor-pointer"
+                >
+                  <i className={social.icon + " text-base"}></i>
+                </button>
+              ))}
+            </div>
           </div>
-          <p>&copy; 2026 My Portfolio. {t.footer}</p>
+
+          {/* Row 2: Copyright */}
+          <div className="hidden lg:block w-px h-4 bg-gray-300 dark:bg-gray-800" />
+          
+          <p className="opacity-80 text-center tracking-wide">&copy; 2026 Win Studios. {t.footer}</p>
+
+          {/* Row 3: Visits & Settings */}
+          <div className="hidden lg:block w-px h-4 bg-gray-300 dark:bg-gray-800" />
+          
+          <div className="flex items-center justify-center gap-8 lg:gap-6">
+            <div className="flex items-center gap-2">
+              <i className="fas fa-eye text-primary opacity-70"></i>
+              <span>{visitCount !== null ? visitCount.toLocaleString() : '...'} {t.visits}</span>
+            </div>
+            
+            <div className="relative flex items-center gap-3">
+              <button 
+                onClick={() => setShowSettings(!showSettings)}
+                className={`hover:text-primary transition-all cursor-pointer text-sm ${showSettings ? 'rotate-90 text-primary' : ''}`}
+                title="Settings"
+              >
+                <i className="fas fa-cog"></i>
+              </button>
+              <AnimatePresence>
+                {showSettings && (
+                  <motion.div 
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    className="absolute left-full ml-4 flex items-center gap-4 border-l border-gray-200 dark:border-gray-800 pl-4 z-50 whitespace-nowrap bg-white dark:bg-black py-1"
+                  >
+                    <button onClick={toggleTheme} className="hover:text-primary transition-colors cursor-pointer" title="Toggle Theme">
+                      <i className={`fas ${isDarkMode ? 'fa-sun' : 'fa-moon'}`}></i>
+                    </button>
+                    <button onClick={() => setShowThemeColorPopup(true)} className="hover:text-primary transition-colors cursor-pointer" title="Theme Color">
+                      <i className="fas fa-palette"></i>
+                    </button>
+                    <button onClick={() => setShowLanguagePopup(true)} className="hover:text-primary transition-colors cursor-pointer" title="Change Language">
+                      <i className="fas fa-language"></i>
+                    </button>
+                    <button onClick={() => {
+                        if (showGamePopup) { 
+                          setIsGameClosing(true); 
+                          setTimeout(() => { 
+                            setShowGamePopup(false); 
+                            setIsGameClosing(false); 
+                          }, 100); 
+                        } else {
+                          setShowGamePopup(true);
+                        }
+                    }} className="hover:text-primary transition-colors cursor-pointer" title="Play Games">
+                      <i className="fas fa-gamepad"></i>
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
       </footer>
+
 
       {/* Custom Cursor Dot */}
       <div 
@@ -1022,191 +1209,24 @@ function App() {
         />
       ))}
 
-      {/* Settings Button - Right Side */}
-      <div className={`fixed right-8 ${showScrollTop ? 'bottom-24' : 'bottom-8'} z-50`}>
-        <div className="relative flex items-center justify-center w-12 h-12">
-          
-          {/* Circular popup buttons - fan out radially */}
-          {/* Theme Toggle Button (Straight Up) */}
-          <div 
-            className={`absolute transition-all duration-300 ease-out ${showSettings ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none scale-50'}`}
-            style={{ transform: showSettings ? 'translate(0, -65px)' : 'translate(0, 0)' }}
-          >
-            <button
-              onClick={() => {
-                toggleTheme();
-              }}
-              className={`w-11 h-11 rounded-full flex items-center justify-center shadow-2xl transition-all cursor-pointer group ${
-                isDarkMode 
-                  ? 'bg-white text-black hover:bg-gray-100' 
-                  : 'bg-black text-white hover:bg-gray-800'
-              }`}
-              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              <i className={`fas ${isDarkMode ? 'fa-sun' : 'fa-moon'} text-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12`}></i>
-            </button>
-          </div>
 
-          {/* Theme Color Button (Top Left) */}
-          <div 
-            className={`absolute transition-all duration-300 ease-out delay-75 ${showSettings ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none scale-50'}`}
-            style={{ transform: showSettings ? 'translate(-50px, -50px)' : 'translate(0, 0)' }}
-          >
-            <button
-              onClick={() => {
-                if (showGamePopup) { setIsGameClosing(true); setTimeout(() => { setShowGamePopup(false); setIsGameClosing(false); }, 100); }
-                if (showLanguagePopup) {
-                  setIsLanguageClosing(true);
-                  setTimeout(() => {
-                    setShowLanguagePopup(false);
-                    setIsLanguageClosing(false);
-                  }, 100);
-                }
-                if (showGamePopup) { setIsGameClosing(true); setTimeout(() => { setShowGamePopup(false); setIsGameClosing(false); }, 100); }
-                if (showThemeColorPopup) {
-                  setIsThemeColorClosing(true);
-                  setTimeout(() => {
-                    setShowThemeColorPopup(false);
-                    setIsThemeColorClosing(false);
-                  }, 100);
-                } else {
-                  setShowThemeColorPopup(true);
-                }
-              }}
-              className={`w-11 h-11 rounded-full flex items-center justify-center shadow-2xl transition-all cursor-pointer group ${
-                isDarkMode 
-                  ? 'bg-primary text-white hover:brightness-110' 
-                  : 'bg-primary text-white hover:brightness-90'
-              }`}
-              title="Change Theme Color"
-            >
-              <i className="fas fa-palette text-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"></i>
-            </button>
-          </div>
-
-          {/* Language Button (Straight Left) */}
-          <div 
-            className={`absolute transition-all duration-300 ease-out delay-150 ${showSettings ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none scale-50'}`}
-            style={{ transform: showSettings ? 'translate(-65px, 0)' : 'translate(0, 0)' }}
-          >
-            <button
-              onClick={() => {
-                if (showGamePopup) { setIsGameClosing(true); setTimeout(() => { setShowGamePopup(false); setIsGameClosing(false); }, 100); }
-                if (showThemeColorPopup) {
-                  setIsThemeColorClosing(true);
-                  setTimeout(() => {
-                    setShowThemeColorPopup(false);
-                    setIsThemeColorClosing(false);
-                  }, 100);
-                }
-                if (showGamePopup) { setIsGameClosing(true); setTimeout(() => { setShowGamePopup(false); setIsGameClosing(false); }, 100); }
-                if (showLanguagePopup) {
-                  setIsLanguageClosing(true);
-                  setTimeout(() => {
-                    setShowLanguagePopup(false);
-                    setIsLanguageClosing(false);
-                  }, 100);
-                } else {
-                  setShowLanguagePopup(true);
-                }
-              }}
-              className={`w-11 h-11 rounded-full flex items-center justify-center shadow-2xl transition-all custom-cursor-pointer group ${
-                isDarkMode 
-                  ? 'bg-green-500 text-white hover:bg-green-400' 
-                  : 'bg-green-500 text-white hover:bg-green-400'
-              }`}
-              title="Change Language"
-            >
-              <FontAwesomeIcon icon={faLanguage} className="text-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
-            </button>
-          </div>
-
-          {/* Game Button (Bottom Left) */}
-          <div 
-            className={`absolute transition-all duration-300 ease-out delay-[225ms] ${showSettings ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none scale-50'}`}
-            style={{ transform: showSettings ? 'translate(-50px, 50px)' : 'translate(0, 0)' }}
-          >
-            <button
-              onClick={() => {
-                if (showLanguagePopup) {
-                  setIsLanguageClosing(true);
-                  setTimeout(() => {
-                    setShowLanguagePopup(false);
-                    setIsLanguageClosing(false);
-                  }, 100);
-                }
-                if (showThemeColorPopup) {
-                  setIsThemeColorClosing(true);
-                  setTimeout(() => {
-                    setShowThemeColorPopup(false);
-                    setIsThemeColorClosing(false);
-                  }, 100);
-                }
-                if (showGamePopup) {
-                  setIsGameClosing(true);
-                  setTimeout(() => {
-                    setShowGamePopup(false);
-                    setIsGameClosing(false);
-                  }, 100);
-                } else {
-                  setShowGamePopup(true);
-                }
-              }}
-              className={`w-11 h-11 rounded-full flex items-center justify-center shadow-2xl transition-all custom-cursor-pointer group ${
-                isDarkMode 
-                  ? 'bg-purple-500 text-white hover:bg-purple-400' 
-                  : 'bg-purple-500 text-white hover:bg-purple-400'
-              }`}
-              title="Play Games"
-            >
-              <i className="fas fa-gamepad text-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"></i>
-            </button>
-          </div>
-
-          {/* Main Settings Button */}
-          <button
-            onClick={() => {
-              if (showSettings) {
-                if (showLanguagePopup) {
-                  setIsLanguageClosing(true);
-                  setTimeout(() => {
-                    setShowLanguagePopup(false);
-                    setIsLanguageClosing(false);
-                  }, 100);
-                }
-                if (showGamePopup) { 
-                  setIsGameClosing(true); 
-                  setTimeout(() => { 
-                    setShowGamePopup(false); 
-                    setIsGameClosing(false); 
-                  }, 100); 
-                }
-                if (showThemeColorPopup) {
-                  setIsThemeColorClosing(true);
-                  setTimeout(() => {
-                    setShowThemeColorPopup(false);
-                    setIsThemeColorClosing(false);
-                  }, 100);
-                }
-              }
-              setShowSettings(!showSettings);
-            }}
-            aria-label="Settings"
-            className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-2xl transition-all custom-cursor-pointer group ${
-              isDarkMode 
-                ? 'bg-white text-black hover:bg-gray-100' 
-                : 'bg-black text-white hover:bg-gray-800'
-            } ${showSettings ? 'rotate-90' : ''}`}
-          >
-            <i className="fas fa-cog text-xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"></i>
-          </button>
-        </div>
-      </div>
 
       {/* Language Popup - positioned above the buttons on the right */}
       {showLanguagePopup && (
         <div className={`fixed right-8 ${showScrollTop ? 'bottom-40' : 'bottom-24'} z-[60] mb-2 ${isLanguageClosing ? 'animate-[popupSlideDown_0.1s_ease-in]' : 'animate-[popupSlideUp_0.1s_ease-out]'}`}>
-          <div className={`rounded-2xl p-4 min-w-[180px] shadow-2xl origin-bottom-right ${isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
+          <div className={`rounded-2xl p-4 min-w-[180px] shadow-2xl origin-bottom-right relative ${isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
+            <button 
+              onClick={() => {
+                setIsLanguageClosing(true);
+                setTimeout(() => {
+                  setShowLanguagePopup(false);
+                  setIsLanguageClosing(false);
+                }, 100);
+              }}
+              className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              <i className="fas fa-times text-xs opacity-50"></i>
+            </button>
             <h3 className={`text-lg font-bold mb-3 ${isDarkMode ? 'text-white' : 'text-black'}`}>Language</h3>
             <div className="space-y-1">
               {[
@@ -1248,7 +1268,19 @@ function App() {
       {/* Game Popup */}
       {showGamePopup && (
         <div className={`fixed right-8 ${showScrollTop ? 'bottom-40' : 'bottom-24'} z-[60] mb-2 ${isGameClosing ? 'animate-[popupSlideDown_0.1s_ease-in]' : 'animate-[popupSlideUp_0.1s_ease-out]'}`}>
-          <div className={`rounded-2xl p-4 w-64 shadow-2xl origin-bottom-right ${isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
+          <div className={`rounded-2xl p-4 w-64 shadow-2xl origin-bottom-right relative ${isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
+            <button 
+              onClick={() => {
+                setIsGameClosing(true);
+                setTimeout(() => {
+                  setShowGamePopup(false);
+                  setIsGameClosing(false);
+                }, 100);
+              }}
+              className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              <i className="fas fa-times text-xs opacity-50"></i>
+            </button>
             <h3 className={`text-lg font-bold mb-3 ${isDarkMode ? 'text-white' : 'text-black'}`}>Play Games</h3>
             <div className="grid grid-cols-2 gap-2">
               {[
@@ -1316,10 +1348,43 @@ function App() {
                   type="color"
                   value={themeColor}
                   onChange={(e) => handleColorChange(e.target.value)}
-                  className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
-                  title="Custom Color"
                 />
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Theme Color Popup */}
+      {showThemeColorPopup && (
+        <div className={`fixed right-8 ${showScrollTop ? 'bottom-40' : 'bottom-24'} z-[60] mb-2 ${isThemeColorClosing ? 'animate-[popupSlideDown_0.1s_ease-in]' : 'animate-[popupSlideUp_0.1s_ease-out]'}`}>
+          <div className={`rounded-2xl p-4 w-64 shadow-2xl origin-bottom-right relative ${isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
+            <button 
+              onClick={() => {
+                setIsThemeColorClosing(true);
+                setTimeout(() => {
+                  setShowThemeColorPopup(false);
+                  setIsThemeColorClosing(false);
+                }, 100);
+              }}
+              className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              <i className="fas fa-times text-xs opacity-50"></i>
+            </button>
+            <h3 className={`text-lg font-bold mb-3 ${isDarkMode ? 'text-white' : 'text-black'}`}>Theme Color</h3>
+            <div className="grid grid-cols-5 gap-2 mb-4">
+              {[
+                '#FF3366', '#00F2FE', '#7000FF', '#FFB800', '#00FF85',
+                '#FF6B6B', '#4ECDC4', '#A55EEA', '#F7B731', '#26DE81',
+                '#EB4D4B', '#22A6B3', '#686DE0', '#F0932B', '#7ED6DF'
+              ].map((color) => (
+                <button
+                  key={color}
+                  onClick={() => handleColorChange(color)}
+                  className={`w-8 h-8 rounded-full transition-transform hover:scale-110 ${themeColor === color ? 'ring-2 ring-offset-2 ring-primary' : ''}`}
+                  style={{ backgroundColor: color }}
+                />
+              ))}
             </div>
             <div className={`flex items-center justify-between px-3 py-2 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
                <span className={`text-xs font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Current:</span>
@@ -1350,15 +1415,17 @@ function App() {
             exit={{ opacity: 0, scale: 0.5, y: 20 }}
             transition={{ duration: 0.3 }}
             onClick={scrollToTop}
-            className="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-primary to-secondary text-black rounded-full flex items-center justify-center shadow-2xl shadow-primary/50 z-40 group"
+            className="fixed bottom-20 right-6 w-10 h-10 bg-primary text-black rounded-full flex items-center justify-center shadow-xl z-40 group"
             title="Scroll to top"
           >
-            <i className="fas fa-chevron-up text-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"></i>
+            <i className="fas fa-chevron-up transition-transform duration-300 group-hover:scale-110"></i>
           </motion.button>
         )}
       </AnimatePresence>
 
-      <WinBot isDarkMode={isDarkMode} />
+      <div className="fixed bottom-6 right-6 z-50">
+        <WinBot isDarkMode={isDarkMode} />
+      </div>
 
       {/* Custom Cursor & Echoes */}
       <div 

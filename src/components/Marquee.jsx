@@ -57,20 +57,17 @@ export default function Marquee({ items = [], speed = 60, reverse = false, class
         {copies.map((item, i) => (
           <div
             key={i}
-            className="flex flex-col items-center justify-center gap-2 mx-6 select-none"
-            style={{ minWidth: '80px' }}
+            className="flex items-center justify-center mx-3 sm:mx-4 select-none"
+            style={{ minWidth: '48px' }}
           >
             <img
               src={item.src}
               alt={item.label}
-              className="w-10 h-10 object-contain lazy-load"
+              className="w-10 h-10 sm:w-12 sm:h-12 object-contain lazy-load"
               loading="lazy"
               draggable={false}
               style={{ pointerEvents: 'none' }}
             />
-            <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wide">
-              {item.label}
-            </span>
           </div>
         ))}
       </div>
