@@ -5,7 +5,7 @@ import Marquee from './components/Marquee';
 import LoadingScreen from './components/LoadingScreen';
 
 import ProjectModal from './components/ProjectModal';
-import Testimonials from './components/Testimonials';
+
 import emailjs from '@emailjs/browser';
 import WinBot from './components/WinBot';
 import CustomCursor from './components/CustomCursor';
@@ -332,16 +332,7 @@ function App() {
     };
   }, []);
 
-  const downloadResume = () => {
-    const resumeLink = '/Aldwin_Lebantino_Resume.pdf';
-    const element = document.createElement('a');
-    element.setAttribute('href', resumeLink);
-    element.setAttribute('download', 'Aldwin_Lebantino_Resume.pdf');
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  };
+
 
   const projects = [
     {
@@ -785,16 +776,6 @@ function App() {
         </div>
       </section>
 
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 px-5 bg-white dark:bg-black">
-        <div className="max-w-6xl mx-auto">
-          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 ${isDarkMode ? 'text-white' : 'text-black'}`}>
-            <i className="fas fa-star text-primary mr-2"></i> Testimonies
-          </h2>
-          <Testimonials isDarkMode={isDarkMode} />
-        </div>
-      </section>
 
 
 

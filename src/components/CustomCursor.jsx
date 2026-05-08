@@ -15,7 +15,6 @@ export default function CustomCursor() {
   const dotY = useSpring(cursorY, { damping: 40, stiffness: 1000, mass: 0.1 });
 
   const [isHovering, setIsHovering] = useState(false);
-  const [isTouch, setIsTouch] = useState(false);
   const [touchTrails, setTouchTrails] = useState([]);
   const trailIdRef = useRef(0);
 
@@ -42,7 +41,6 @@ export default function CustomCursor() {
 
     // ── Mobile: Touch tracking ──
     const handleTouchMove = (e) => {
-      setIsTouch(true);
       const touch = e.touches[0];
       if (!touch) return;
 
