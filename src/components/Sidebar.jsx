@@ -56,8 +56,9 @@ const glassStyle = (isDarkMode) => ({
 function scrollToSection(id) {
   const el = document.getElementById(id);
   if (!el) return;
+  // Use a minimal offset to let the section padding handle the visual spacing
   const isMobile = window.innerWidth < 768;
-  const offset = isMobile ? 72 : 0;
+  const offset = isMobile ? -10 : 0; 
   const top = el.getBoundingClientRect().top + window.scrollY - offset;
   window.scrollTo({ top, behavior: 'smooth' });
 }

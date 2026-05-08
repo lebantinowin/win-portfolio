@@ -6,18 +6,25 @@ const SENSITIVE_WORDS = [
   'stupid', 'idiot', 'damn', 'crap', 'bastard', 'nude', 'slut', 'whore', 'fag', 'gay', 'lesbian'
 ];
 
+const SHORTCUTS = [
+  "Tell me about your projects",
+  "What is your tech stack?",
+  "How can I contact you?",
+  "Tell me about your teams"
+];
+
 const BOT_KNOWLEDGE = [
   {
     keywords: ['hi', 'hello', 'hey', 'greetings', 'sup', 'bello'],
     response: "Hello there! I'm WinBot 🤖. I can tell you all about Win's skills, experience, projects, or how to contact him. What would you like to know?"
   },
   {
-    keywords: ['skill', 'skills', 'tech', 'stack', 'languages', 'react', 'node', 'javascript', 'html', 'css', 'php', 'laravel'],
-    response: "Win is a full-stack developer! His tech stack includes React, Node.js, JavaScript, TypeScript, Vite, Tailwind CSS, HTML5, CSS3, PHP, MySQL, Express, and Laravel. He also uses tools like Git, GitHub, Docker, and Postman."
+    keywords: ['skill', 'skills', 'tech', 'stack', 'languages', 'react', 'node', 'javascript', 'html', 'css', 'php', 'laravel', 'mysql', 'tailwind', 'vite'],
+    response: "Win is a full-stack developer! His main tech stack includes React, Laravel, PHP, MySQL, Tailwind CSS, JavaScript, and Vite. He builds robust, modern web applications from frontend to backend."
   },
   {
-    keywords: ['project', 'projects', 'work', 'portfolio', 'ecommerce', 'analytics'],
-    response: "Win has several featured projects, including this responsive Portfolio Website, a Full-stack E-Commerce Platform with Stripe payments, and a Real-time Data Analytics Dashboard using Chart.js. You can find them in the 'Featured Projects' section!"
+    keywords: ['project', 'projects', 'work', 'portfolio', 'tabulation', 'spectaqr', 'warzone'],
+    response: "Win has three featured projects right now: 1) A Laravel-based Tabulation System for competitive events, 2) SectaQR, a QR-based attendance management system, and 3) Warzone Gym CRM, an AI-powered fitness coaching platform!"
   },
   {
     keywords: ['contact', 'email', 'hire', 'reach', 'message'],
@@ -26,6 +33,10 @@ const BOT_KNOWLEDGE = [
   {
     keywords: ['school', 'education', 'college', 'degree', 'university', 'study', 'graduate'],
     response: "Win is taking his B.S. in Information Technology at Ilocos Sur Polytechnic State College (Candon Campus). He is a Cum Laude & Valedictorian candidate, and won Best Thesis for 'Smart Hub for Adaptive Digital Engagement'."
+  },
+  {
+    keywords: ['team', 'teams', 'eccentri', 'nexus', 'leader', 'founder'],
+    response: "Win is the Founder and Leader of two distinct teams: ECCENTRI (an IT solutions team providing tabulation, streaming, and photography) and NEXUS LEAGUE (a dynamic multimedia and gaming community)."
   },
   {
     keywords: ['experience', 'job', 'intern', 'work', 'freelance', 'manager'],
@@ -98,6 +109,19 @@ export default function WinBot({ isDarkMode }) {
     }, 600 + Math.random() * 400); // 600-1000ms delay
   };
 
+  const handleShortcut = (text) => {
+    if (isTyping) return;
+    const userMessage = { text, isBot: false };
+    setMessages(prev => [...prev, userMessage]);
+    setIsTyping(true);
+
+    setTimeout(() => {
+      const responseText = processMessage(text);
+      setMessages(prev => [...prev, { text: responseText, isBot: true }]);
+      setIsTyping(false);
+    }, 600 + Math.random() * 400);
+  };
+
   return (
     <>
       {/* Floating Toggle Button */}
@@ -128,7 +152,7 @@ export default function WinBot({ isDarkMode }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className={`fixed bottom-8 right-8 origin-bottom-right w-[350px] h-[500px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 border ${
+            className={`fixed bottom-4 sm:bottom-8 right-4 sm:right-8 left-4 sm:left-auto origin-bottom-right sm:w-[350px] h-[500px] max-w-none max-h-[calc(100vh-6rem)] rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 border ${
               isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
             }`}
           >
@@ -185,6 +209,24 @@ export default function WinBot({ isDarkMode }) {
                 </div>
               )}
               <div ref={messagesEndRef} />
+            </div>
+
+            {/* Shortcuts */}
+            <div className={`px-3 py-2 border-t overflow-x-auto whitespace-nowrap flex gap-2 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'}`} style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              {SHORTCUTS.map((shortcut, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleShortcut(shortcut)}
+                  disabled={isTyping}
+                  className={`text-[11px] px-3 py-1.5 rounded-full border transition-colors flex-shrink-0 ${
+                    isDarkMode 
+                      ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                      : 'border-gray-300 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {shortcut}
+                </button>
+              ))}
             </div>
 
             {/* Input Area */}

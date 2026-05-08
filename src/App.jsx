@@ -6,8 +6,6 @@ import LoadingScreen from './components/LoadingScreen';
 
 import ProjectModal from './components/ProjectModal';
 import Testimonials from './components/Testimonials';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLanguage } from '@fortawesome/free-solid-svg-icons';
 import emailjs from '@emailjs/browser';
 import WinBot from './components/WinBot';
 
@@ -72,14 +70,15 @@ function App() {
       seeMyWork: 'Tingnan ang aking trabaho',
       downloadResume: 'I-download ang Resume',
       aboutTitle: 'Tungkol sa Akin',
-      aboutP1: "Ako si Win, isang passionate full-stack developer na may kasanayan sa paggawa ng modern web applications. May matibay na pundasyon sa React, Node.js, at cloud technologies, nagbabago ako ng mga ideya sa engaging digital experiences.",
-      aboutP2: "Mahilig akong magtrabaho sa cutting-edge technologies at manatiling updated sa pinakabagong trends sa industriya. Kapag hindi ako nagco-code, maaari mo akong makitang nag-eexplore ng bagong design patterns o nagco-contribute sa open-source projects.",
+      aboutP1: "Karamihan sa trabaho ko ay sa full-stack web development — React, Laravel, at MySQL ang aking mga pangunahing gamit.",
+      aboutP2: "Mahalaga sa akin ang paggawa ng mga bagay na talagang gumagana at madaling gamitin. Maging ito man ay isang website, disenyo, o sistema — gusto kong may solusyon itong naibibigay sa totoong problema.",
+      aboutP3: "Kasalukuyan akong available para sa full-time remote o freelance na trabaho at laging bukas sa mga bagong oportunidad.",
       years: 'Taon',
       projects: 'Mga Proyekto',
       clients: 'Mga Kliyente',
       happyClients: 'Masasayang Kliyente',
-      featuredProjects: 'Mga Itinatampok na Proyekto',
-      viewProject: 'Tingnan ang Proyekto →',
+      featuredProjects: 'Mga Proyekto',
+      viewProject: 'Tingnan ang Proyekto',
       letsWorkTogether: 'Tara, Magtrabaho Tayo',
       workTogetherDesc: 'Laging interesado akong makarinig tungkol sa bagong mga proyekto at oportunidad.',
       connect: 'Kumonekta',
@@ -92,14 +91,15 @@ function App() {
       seeMyWork: '作品を見る',
       downloadResume: '履歴書をダウンロード',
       aboutTitle: '自己紹介',
-      aboutP1: 'Winと申します。モダンなWebアプリケーションの作成に精通した情熱的なフルスタック開発者です。React、Node.js、クラウド技術の強固な基盤を持ち、アイデアを魅力的なデジタル体験に変えています。',
-      aboutP2: '最先端の技術に取り組み、最新の業界トレンドを常に把握することを愛しています。コーディングしていないときは、新しいデザインパターンを探求したり、オープンソースプロジェクトに貢献したりしています。',
+      aboutP1: '主にフルスタックWeb開発に携わっており、React、Laravel、MySQLをメインのツールとして使用しています。',
+      aboutP2: '実際に機能し、使いやすいものを作ることを大切にしています。Webサイト、デザイン、システムのいずれであっても、現実の課題を解決するものでありたいと考えています。',
+      aboutP3: '現在、フルタイムのリモートワークやフリーランスの案件を受け付けており、新しい機会を常に歓迎しています。',
       years: '年',
       projects: 'プロジェクト',
       clients: 'クライアント',
       happyClients: '満足のいくクライアント',
-      featuredProjects: '注目のプロジェクト',
-      viewProject: 'プロジェクトを見る →',
+      featuredProjects: 'プロジェクト',
+      viewProject: 'プロジェクトを見る',
       letsWorkTogether: '一緒に働きましょう',
       workTogetherDesc: '新しいプロジェクトや機会について常にお聞きしたいと思っています。',
       connect: '接続',
@@ -112,16 +112,17 @@ function App() {
       seeMyWork: '내 작품 보기',
       downloadResume: '이력서 다운로드',
       aboutTitle: '소개',
-      aboutP1: '저는 Win입니다. 현대적인 웹 애플리케이션 생성에 전문성을 가진 열정적인 풀스택 개발자입니다. React, Node.js 및 클라우드 기술에 대한 견고한 기반을 바탕으로 아이디어를 매력적인 디지털 경험으로 전환합니다.',
-      aboutP2: '최첨단 기술을 다루고 최신 업계 동향을 파악하는 것을 좋아합니다. 코딩을 하지 않을 때는 새로운 디자인 패턴을 탐색하거나 오픈 소스 프로젝트에 기여하는 것을 찾을 수 있습니다.',
+      aboutP1: '저는 주로 풀스택 웹 개발을 합니다 — React, Laravel 및 MySQL이 제 주요 도구입니다.',
+      aboutP2: '저는 실제로 작동하고 사용하기 쉬운 것을 만드는 데 관심이 있습니다. 웹사이트, 디자인 또는 시스템이든 — 실제 문제를 해결하기를 원합니다.',
+      aboutP3: '현재 원격 또는 프리랜서 작업이 가능하며 새로운 기회에 항상 열려 있습니다.',
       years: '년',
       projects: '프로젝트',
-      clients: '클이언트',
+      clients: '클라이언트',
       happyClients: '만족한 클라이언트',
-      featuredProjects: '주요 프로젝트',
-      viewProject: '프로젝트 보기 →',
-      letsWorkTogether: '함께 일해요',
-      workTogetherDesc: '새로운 프로젝트와 기회에 대해 항상 듣고 싶습니다.',
+      featuredProjects: '프로젝트',
+      viewProject: '프로젝트 보기',
+      letsWorkTogether: '함께 일합시다',
+      workTogetherDesc: '새로운 프로젝트와 기회에 대해 듣는 것에 항상 관심이 있습니다.',
       connect: '연결',
       footer: '모든 권리 보유.',
       visits: '방문',
@@ -383,13 +384,6 @@ function App() {
     }
   ];
 
-  const getStats = () => [
-    { label: t.years,         value: '5+', highlight: false },
-    { label: t.projects,      value: '68', highlight: true  },
-    { label: t.clients,       value: '30', highlight: false },
-    { label: t.happyClients,  value: '08', highlight: false }
-  ];
-
   const certificationsList = [
     {
       id: 1,
@@ -427,14 +421,6 @@ function App() {
     { src: 'https://skillicons.dev/icons?i=vite', label: 'Vite' },
     { src: 'https://skillicons.dev/icons?i=nodejs', label: 'Node.js' },
     { src: 'https://skillicons.dev/icons?i=express', label: 'Express' },
-  ];
-
-  const toolsRow = [
-    { src: 'https://skillicons.dev/icons?i=github', label: 'GitHub' },
-    { src: 'https://skillicons.dev/icons?i=git', label: 'Git' },
-    { src: 'https://skillicons.dev/icons?i=docker', label: 'Docker' },
-    { src: 'https://skillicons.dev/icons?i=vscode', label: 'VS Code' },
-    { src: 'https://skillicons.dev/icons?i=postman', label: 'Postman' },
   ];
 
   return (
@@ -557,7 +543,20 @@ function App() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          <a href="#projects" className="inline-flex items-center gap-2 px-4 py-1.5 text-sm rounded-full border-2 border-primary text-white bg-primary-hover hover:bg-primary-hover transition-all font-semibold">
+          <a 
+            href="#projects" 
+            onClick={(e) => {
+              e.preventDefault();
+              const el = document.getElementById('projects');
+              if (el) {
+                const isMobile = window.innerWidth < 768;
+                const offset = isMobile ? -10 : 40;
+                const y = el.getBoundingClientRect().top + window.scrollY - offset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+              }
+            }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 text-sm rounded-full border-2 border-primary text-white bg-primary-hover hover:bg-primary-hover transition-all font-semibold"
+          >
             <i className="fas fa-arrow-right text-xs"></i> 
             <span className="hidden sm:inline">Explore Projects</span>
             <span className="inline sm:hidden">Projects</span>
@@ -648,7 +647,7 @@ function App() {
                   <div className="p-6 flex items-center gap-4 flex-grow">
                     {cert.icon && (
                       <div className="w-12 h-12 shrink-0 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border border-gray-200 dark:border-gray-700">
-                        <img src={cert.icon} alt={cert.title} className="w-6 h-6 object-contain drop-shadow-md" />
+                        <img src={cert.icon} alt={cert.title} loading="lazy" className="w-6 h-6 object-contain drop-shadow-md" />
                       </div>
                     )}
                     <div>
@@ -667,14 +666,14 @@ function App() {
                 </div>
               ))}
             </div>
-            <div className="mt-8 text-center">
+            <div className="mt-8 text-center px-4">
               <a 
                 href="https://drive.google.com/drive/folders/1frL2z-wbgw1D-Yhp4h5MyPeU6T8sjS1f?usp=drive_link" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 text-sm font-medium transition-colors hover:underline ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-black'}`}
+                className={`inline-block text-sm font-medium transition-colors hover:underline ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-black'}`}
               >
-                Explore my other Certificates and Achievements <i className="fas fa-arrow-right text-xs"></i>
+                Explore my other Certificates and Achievements&nbsp;<i className="fas fa-arrow-right text-[10px]"></i>
               </a>
             </div>
           </div>
@@ -687,7 +686,7 @@ function App() {
             <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
               {/* ECCENTRI */}
               <div className="bg-gray-50 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-800 rounded-xl p-8 flex flex-col items-center text-center hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 group">
-                <img src="/ECCENTRI.svg" alt="ECCENTRI" className="w-24 h-24 mb-6 object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300" />
+                <img src="/ECCENTRI.svg" alt="ECCENTRI" loading="lazy" className="w-24 h-24 mb-6 object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300" />
                 <h4 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>ECCENTRI</h4>
                 <div className="mb-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold uppercase tracking-wider">
                   <i className="fas fa-crown"></i> Founder & Leader
@@ -707,7 +706,7 @@ function App() {
 
               {/* NEXUS LEAGUE */}
               <div className="bg-gray-50 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-800 rounded-xl p-8 flex flex-col items-center text-center hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 group">
-                <img src="/NEXUSLEAGUE.svg" alt="NEXUS LEAGUE" className="w-24 h-24 mb-6 object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300" />
+                <img src="/NEXUSLEAGUE.svg" alt="NEXUS LEAGUE" loading="lazy" className="w-24 h-24 mb-6 object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300" />
                 <h4 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>NEXUS LEAGUE</h4>
                 <div className="mb-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold uppercase tracking-wider">
                   <i className="fas fa-crown"></i> Founder & Leader
@@ -742,11 +741,11 @@ function App() {
             {projects.map(project => (
               <div
                 key={project.id}
-                className="w-[85vw] sm:w-[350px] md:w-auto shrink-0 snap-center bg-primary/5 border border-gray-800 rounded-xl hover:shadow-2xl hover:shadow-primary/20 md:hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col"
+                className="w-[85vw] sm:w-[350px] md:w-auto shrink-0 snap-center bg-primary/5 border border-gray-800 rounded-xl hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col group"
               >
                 {project.image && (
                   <div className="h-48 overflow-hidden">
-                    <img src={project.image} alt={project.title} className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
+                    <img src={project.image} alt={project.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   </div>
                 )}
                 <div className="p-4 md:p-6 flex flex-col flex-grow">
@@ -768,9 +767,12 @@ function App() {
           </div>
           
           {/* Mobile Swipe Indicator */}
-          <div className="md:hidden flex items-center justify-center gap-2 mt-2">
-            <span className={`text-xs font-bold tracking-widest uppercase opacity-60 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Swipe</span>
-            <i className={`fas fa-arrow-right-long text-sm opacity-60 animate-pulse ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}></i>
+          <div className="md:hidden flex justify-center mt-4">
+            <div className={`flex items-center gap-3 px-4 py-2 rounded-full ${isDarkMode ? 'bg-white/5 text-gray-300' : 'bg-black/5 text-gray-600'}`}>
+              <i className="fas fa-chevron-left text-[10px] opacity-40"></i>
+              <span className="text-xs font-medium tracking-wide">Swipe to explore</span>
+              <i className="fas fa-chevron-right text-[10px] opacity-80 animate-pulse"></i>
+            </div>
           </div>
         </div>
       </section>
@@ -1184,10 +1186,10 @@ function App() {
               <AnimatePresence>
                 {showSettings && (
                   <motion.div 
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
-                    className="absolute top-full mt-2 left-1/2 -translate-x-1/2 lg:top-auto lg:mt-0 lg:left-full lg:-translate-x-0 lg:ml-4 flex items-center gap-4 lg:border-l border-gray-200 dark:border-gray-800 lg:pl-4 z-50 whitespace-nowrap bg-white dark:bg-black py-1 px-2 rounded lg:px-0 lg:rounded-none"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    className="absolute left-full ml-4 flex items-center gap-4 border-l border-gray-200 dark:border-gray-800 pl-4 z-50 whitespace-nowrap bg-white dark:bg-black py-1"
                   >
                     <button onClick={() => setShowThemeColorPopup(true)} className="hover:text-primary transition-colors cursor-pointer" title="Theme Color">
                       <i className="fas fa-palette"></i>
