@@ -59,7 +59,7 @@ function App() {
       clients: 'Clients',
       happyClients: 'Happy Clients',
       featuredProjects: 'Projects',
-      viewProject: 'View Project →',
+      viewProject: 'View Project',
       letsWorkTogether: "Let's Work Together",
       workTogetherDesc: "I'm always interested in hearing about new projects and opportunities.",
       connect: 'Connect',
@@ -341,27 +341,45 @@ function App() {
   const projects = [
     {
       id: 1,
-      title: 'Portfolio Website',
-      description: 'This responsive React portfolio with smooth animations, dark mode, and multi-language support.',
-      tags: ['React', 'Tailwind', 'Vite'],
-      link: 'https://github.com/lebantinowin/win-portfolio',
-      image: 'https://images.unsplash.com/photo-1507238692062-110ce3a12b90?w=600&h=400&fit=crop'
+      title: 'Eccentri Tabulation System',
+      description: 'A Laravel-based platform for managing competitive events with real-time judging and score tabulation. It streamlines the process of scoring contestants across multiple criteria, calculating weighted results, and generating live leaderboards.',
+      detailedDescription: "The Tabulation System is a comprehensive web application designed to manage events and their scoring processes. It provides three main interfaces:\n\nAdmin Dashboard: Administrators can create and manage events, define judging criteria with weightings, register contestants, assign judges, and oversee the entire judging process.\n\nJudge Portal: Judges securely access isolated event scoring interfaces where they can enter scores for contestants based on defined criteria. The system includes auto-save functionality to prevent data loss and prevents cross-event access for security.\n\nResults Portal: Displays live or completed event results with automatically calculated rankings based on weighted scores. Features include rank tabulation with tie-breaker support, the ability to override scores for adjustments, and public viewing of competition results.\n\nKey Features: Automated score weighting and rank calculation, tabulation override functionality for manual adjustments, audit logging for compliance, image support for contestants, and assistance request management to facilitate event operations.",
+      tags: ['Laravel', 'Blade', 'PHP', 'Vite', 'Tailwind', 'MySQL'],
+      github: 'https://github.com/lebantinowin/tabulation',
+      image: '/Eccentri TS Screenshots/Screenshot 2026-05-04 194042.png',
+      images: [
+        '/Eccentri TS Screenshots/Screenshot 2026-05-04 194042.png',
+        '/Eccentri TS Screenshots/Screenshot 2026-05-04 193333.png',
+        '/Eccentri TS Screenshots/Screenshot 2026-05-04 193314.png'
+      ]
     },
     {
       id: 2,
-      title: 'E-Commerce Platform',
-      description: 'Full-stack e-commerce with Stripe payments, user auth, and admin dashboard.',
-      tags: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-      link: 'https://github.com/lebantinowin/ecommerce-demo',
-      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop'
+      title: 'SectaQR',
+      description: 'A web-based attendance management system that uses QR code scanning to automatically track student/employee check-ins and check-outs across multiple time periods.',
+      detailedDescription: "Attendance System with QR Code Scanner is a comprehensive attendance tracking solution designed for educational institutions and organizations. The system automates attendance marking through QR code scanning, eliminating manual record-keeping and reducing errors.\n\nKey Features:\n\n- QR Code-Based Check-In/Out: Real-time attendance marking through QR code scanning with multiple time windows (morning in/out, afternoon in/out)\n- Multi-Department Support: Organize students/employees by departments with visual analytics showing department-wise distribution\n- Event Management: Create and manage attendance events with customizable time windows and fine rates for late arrivals\n- Student Management: Maintain comprehensive student records with ID numbers, department assignments, and attendance history\n- Attendance Tracking: Record attendance with automatic fine calculation based on configured late-arrival penalties\n- Administrative Dashboard: Visual analytics including event count, student count, department statistics, and attendance summaries\n- Reporting & Export: Generate and export attendance reports in PDF format with TCPDF and DOMPDF support\n- Access Control: Role-based authentication system with admin login for secure access to sensitive data\n- Excuse Management: Handle attendance excuses and special cases with fine confirmation workflows\n\nThe system solves the problem of manual, time-consuming attendance tracking by providing an automated, scalable, and accurate solution that integrates seamlessly into existing institutional workflows.",
+      tags: ['PHP', 'MySQL', 'HTML', 'CSS', 'JavaScript', 'Endroid QR Code'],
+      github: 'https://github.com/lebantinowin/attendance-system',
+      image: '/SpectaQR Screenshots/Screenshot 2026-05-04 200705.png',
+      images: [
+        '/SpectaQR Screenshots/Screenshot 2026-05-04 200705.png',
+        '/SpectaQR Screenshots/Screenshot 2026-05-04 200643.png'
+      ]
     },
     {
       id: 3,
-      title: 'Data Analytics Dashboard',
-      description: 'Real-time dashboard with interactive charts, filters, and API integration.',
-      tags: ['React', 'Chart.js', 'Node.js', 'Express'],
-      link: 'https://github.com/lebantinowin/analytics-dashboard',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop'
+      title: 'Warzone Gym CRM',
+      description: 'A comprehensive web-based gym membership and fitness coaching platform. Developed for a Hackathon project with real clients.',
+      detailedDescription: "Warzone Gym CRM is an all-in-one fitness facility management system designed to revolutionize how gyms interact with their members. The platform serves both members and gym administrators with distinct, role-based interfaces.\n\n*Hackathon: Developed during a hackathon where the team selected real clients.*\n\nKey Features:\n\nMember Dashboard:\n- AI-Powered Coach: Personalized fitness coaching powered by Groq/Qwen AI with customizable coaching styles (harsh motivation, balanced, supportive)\n- Workout Tracking: Log and manage workouts with exercise details, sets, reps, and form notes; includes pagination and full workout history\n- Attendance Calendar: Interactive monthly calendar to mark attendance, log rest days, and track gym visits with attendance rate calculations\n- Mood & Journal: Digital fitness journal with mood check-ins, habit tracking, and entries that can be starred or archived for reflection\n- Real-Time Notifications: Contextual reminders for missed workouts, membership renewals, and progress milestones\n- Goal Progress Tracking: Visual goal progress indicators powered by AI confidence levels based on attendance and workout consistency\n- User Profile: Customizable fitness goals, profile pictures, and coaching preferences\n\nAdmin Dashboard:\n- Member Management: Full user administration, role management (member/admin), and member search\n- Reports & Analytics: Gym-wide statistics including total members, total workouts logged, average attendance rates, and activity trends\n- Activity Monitoring: Real-time tracking of all member activities, logins, and system interactions\n- Messaging System: Direct communication with members for announcements, feedback, and support\n- Feedback Management: Centralized feedback collection and status tracking (pending/resolved)\n- Administrative Reports: Detailed reports on gym usage, member engagement, and performance metrics\n\nCore Functionality:\nSecure authentication, role-based access control, real-time AJAX interactions, customizable AI coaching, and a responsive Tailwind CSS dark theme.",
+      tags: ['PHP', 'HTML5', 'CSS', 'JavaScript', 'Tailwind', 'Groq API', 'MySQL'],
+      github: 'https://github.com/lebantinowin/warzone',
+      image: '/Warzone Screesnshots/Screenshot 2026-05-08 075815.png',
+      images: [
+        '/Warzone Screesnshots/Screenshot 2026-05-08 075815.png',
+        '/Warzone Screesnshots/Screenshot 2026-05-08 075950.png',
+        '/Warzone Screesnshots/Screenshot 2026-05-08 080013.png',
+        '/Warzone Screesnshots/Screenshot 2026-05-08 080113.png'
+      ]
     }
   ];
 
@@ -717,21 +735,24 @@ function App() {
           <h2 className={`text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 ${isDarkMode ? 'text-white' : 'text-black'}`}>
             <i className="fas fa-code text-primary mr-2"></i> {t.featuredProjects}
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div 
+            className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 snap-x snap-mandatory pb-8 -mx-5 px-5 md:mx-0 md:px-0 md:pb-0 scroll-smooth"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
             {projects.map(project => (
               <div
                 key={project.id}
-                className="bg-primary/5 border border-gray-800 rounded-xl hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col"
+                className="w-[85vw] sm:w-[350px] md:w-auto shrink-0 snap-center bg-primary/5 border border-gray-800 rounded-xl hover:shadow-2xl hover:shadow-primary/20 md:hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col"
               >
                 {project.image && (
                   <div className="h-48 overflow-hidden">
                     <img src={project.image} alt={project.title} className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
                   </div>
                 )}
-                <div className="p-6 flex flex-col flex-grow">
-                  <h3 className={`text-xl font-bold mb-3 ${isDarkMode ? 'text-white' : 'text-black'}`}>{project.title}</h3>
-                  <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'} mb-4 leading-relaxed flex-grow`}>{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
+                <div className="p-4 md:p-6 flex flex-col flex-grow">
+                  <h3 className={`text-lg md:text-xl font-bold mb-2 md:mb-3 line-clamp-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>{project.title}</h3>
+                  <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'} text-sm md:text-base mb-3 md:mb-4 leading-relaxed line-clamp-3`}>{project.description}</p>
+                  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4">
                     {project.tags.map((tag, i) => (
                       <span key={i} className="bg-primary/20 text-secondary text-xs font-semibold px-3 py-1 rounded-full">
                         {tag}
@@ -744,6 +765,12 @@ function App() {
                 </div>
               </div>
             ))}
+          </div>
+          
+          {/* Mobile Swipe Indicator */}
+          <div className="md:hidden flex items-center justify-center gap-2 mt-2">
+            <span className={`text-xs font-bold tracking-widest uppercase opacity-60 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Swipe</span>
+            <i className={`fas fa-arrow-right-long text-sm opacity-60 animate-pulse ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}></i>
           </div>
         </div>
       </section>
@@ -1130,7 +1157,12 @@ function App() {
           {/* Row 2: Copyright */}
           <div className="hidden lg:block w-px h-4 bg-gray-300 dark:bg-gray-800" />
           
-          <p className="opacity-80 text-center tracking-wide">&copy; 2026 Win Studios. {t.footer}</p>
+          <div className="flex flex-col items-center gap-1.5">
+            <p className="opacity-80 text-center tracking-wide">&copy; 2026 Win Lebantino. {t.footer}</p>
+            <p className="text-xs opacity-60 flex items-center gap-1.5">
+              Built with <i className="fab fa-react text-[#61DAFB]"></i> React & <i className="fab fa-css3-alt text-[#38B2AC]"></i> Tailwind
+            </p>
+          </div>
 
           {/* Row 3: Visits & Settings */}
           <div className="hidden lg:block w-px h-4 bg-gray-300 dark:bg-gray-800" />
@@ -1152,32 +1184,16 @@ function App() {
               <AnimatePresence>
                 {showSettings && (
                   <motion.div 
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -10 }}
-                    className="absolute left-full ml-4 flex items-center gap-4 border-l border-gray-200 dark:border-gray-800 pl-4 z-50 whitespace-nowrap bg-white dark:bg-black py-1"
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    className="absolute top-full mt-2 left-1/2 -translate-x-1/2 lg:top-auto lg:mt-0 lg:left-full lg:-translate-x-0 lg:ml-4 flex items-center gap-4 lg:border-l border-gray-200 dark:border-gray-800 lg:pl-4 z-50 whitespace-nowrap bg-white dark:bg-black py-1 px-2 rounded lg:px-0 lg:rounded-none"
                   >
-                    <button onClick={toggleTheme} className="hover:text-primary transition-colors cursor-pointer" title="Toggle Theme">
-                      <i className={`fas ${isDarkMode ? 'fa-sun' : 'fa-moon'}`}></i>
-                    </button>
                     <button onClick={() => setShowThemeColorPopup(true)} className="hover:text-primary transition-colors cursor-pointer" title="Theme Color">
                       <i className="fas fa-palette"></i>
                     </button>
                     <button onClick={() => setShowLanguagePopup(true)} className="hover:text-primary transition-colors cursor-pointer" title="Change Language">
                       <i className="fas fa-language"></i>
-                    </button>
-                    <button onClick={() => {
-                        if (showGamePopup) { 
-                          setIsGameClosing(true); 
-                          setTimeout(() => { 
-                            setShowGamePopup(false); 
-                            setIsGameClosing(false); 
-                          }, 100); 
-                        } else {
-                          setShowGamePopup(true);
-                        }
-                    }} className="hover:text-primary transition-colors cursor-pointer" title="Play Games">
-                      <i className="fas fa-gamepad"></i>
                     </button>
                   </motion.div>
                 )}
