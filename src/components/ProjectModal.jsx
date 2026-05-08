@@ -41,14 +41,17 @@ export default function ProjectModal({ project, isDarkMode, onClose, t }) {
           isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'
         } border ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}
       >
-        <button
-          onClick={onClose}
-          className={`absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-            isDarkMode ? 'bg-black/50 hover:bg-black text-white' : 'bg-white/80 hover:bg-gray-100 text-black'
-          }`}
-        >
-          <i className="fas fa-times"></i>
-        </button>
+        {/* Sticky Close Button — always visible */}
+        <div className="sticky top-0 z-20 flex justify-end pr-4 pt-4 pointer-events-none">
+          <button
+            onClick={onClose}
+            className={`pointer-events-auto w-10 h-10 rounded-full flex items-center justify-center transition-colors shadow-lg ${
+              isDarkMode ? 'bg-black/70 hover:bg-black text-white' : 'bg-white/90 hover:bg-gray-100 text-black'
+            }`}
+          >
+            <i className="fas fa-times"></i>
+          </button>
+        </div>
 
         <div className="relative w-full h-64 sm:h-80 md:h-[450px] group overflow-hidden">
           <AnimatePresence mode="wait">
@@ -56,6 +59,7 @@ export default function ProjectModal({ project, isDarkMode, onClose, t }) {
               key={currentImageIndex}
               src={images[currentImageIndex]} 
               alt={`${project.title} screenshot ${currentImageIndex + 1}`} 
+              loading="lazy"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

@@ -27,6 +27,13 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Hide native cursor on desktop — CustomCursor handles it */
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
 section {
   opacity: 0;
   transform: translateY(20px);

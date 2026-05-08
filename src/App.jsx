@@ -8,6 +8,8 @@ import ProjectModal from './components/ProjectModal';
 import Testimonials from './components/Testimonials';
 import emailjs from '@emailjs/browser';
 import WinBot from './components/WinBot';
+import CustomCursor from './components/CustomCursor';
+import ResumeModal from './components/ResumeModal';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +28,7 @@ function App() {
   const [isThemeColorClosing, setIsThemeColorClosing] = useState(false);
   const [language, setLanguage] = useState('english');
   const [navSide, setNavSide] = useState('left');
+  const [showResumeModal, setShowResumeModal] = useState(false);
   const [activeSocialPopup, setActiveSocialPopup] = useState(null);
   const [socialPopupClosing, setSocialPopupClosing] = useState(false);
   const [emailForm, setEmailForm] = useState({ name: '', email: '', message: '' });
@@ -133,14 +136,15 @@ function App() {
       seeMyWork: 'See Banana Work',
       downloadResume: 'Download Banana',
       aboutTitle: 'About Me (Bello!)',
-      aboutP1: 'Me Win! Full-stack minion developer! Me make modern web banana applications. Me know React, Node.js, cloud technologies! Me turn ideas into banana digital experiences!',
-      aboutP2: 'Me love cutting-edge banana technologies! Me always updated with latest banana trends. When me not coding, me explore new banana patterns or contribute to open-banana projects!',
+      aboutP1: 'Me mostly do full-stack web development — React, Laravel, and MySQL are me main bananas.',
+      aboutP2: 'Me care about building things that actually work and easy to use. Website, design, or system — me want it to solve a real banana problem.',
+      aboutP3: 'Me currently available for full-time remote or freelance work and always open to new banana opportunities.',
       years: 'Banana Years',
       projects: 'Banana Projects',
       clients: 'Banana Clients',
       happyClients: 'Happy Banana Clients',
-      featuredProjects: 'Featured Banana Projects',
-      viewProject: 'View Banana Project →',
+      featuredProjects: 'Banana Projects',
+      viewProject: 'View Banana Project',
       letsWorkTogether: 'Let\'s Work Banana Together!',
       workTogetherDesc: 'Me always interested in new banana projects and opportunities!',
       connect: 'Connect (Bello!)',
@@ -561,9 +565,9 @@ function App() {
             <span className="hidden sm:inline">Explore Projects</span>
             <span className="inline sm:hidden">Projects</span>
           </a>
-          <button onClick={downloadResume} className="inline-flex items-center gap-2 px-4 py-1.5 text-sm rounded-full border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-black transition-all font-semibold">
-            <i className="fas fa-download text-xs"></i> 
-            <span className="hidden sm:inline">Download Resume</span>
+          <button onClick={() => setShowResumeModal(true)} className="inline-flex items-center gap-2 px-4 py-1.5 text-sm rounded-full border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-black transition-all font-semibold">
+            <i className="fas fa-file-pdf text-xs"></i> 
+            <span className="hidden sm:inline">View Resume</span>
             <span className="inline sm:hidden">Resume</span>
           </button>
         </motion.div>
@@ -758,8 +762,12 @@ function App() {
                       </span>
                     ))}
                   </div>
-                  <button onClick={() => setSelectedProject(project)} className="text-primary font-bold hover:text-secondary transition-colors inline-flex items-center gap-2 group/link mt-auto">
-                    {t.viewProject} <i className="fas fa-arrow-right transform group-hover/link:translate-x-1 transition-transform"></i>
+                  <button 
+                    onClick={() => setSelectedProject(project)} 
+                    className="mt-auto self-start inline-flex items-center gap-2 text-xs font-semibold text-primary hover:text-primary/70 transition-all duration-200"
+                  >
+                    View Project
+                    <i className="fas fa-arrow-up-right-from-square text-[10px]"></i>
                   </button>
                 </div>
               </div>
@@ -1445,18 +1453,15 @@ function App() {
         <WinBot isDarkMode={isDarkMode} />
       </div>
 
-      {/* Custom Cursor & Echoes */}
-      <div 
-        className="cursor-dot hidden md:block" 
-        style={{ left: cursorPosition.x, top: cursorPosition.y }} 
+      {/* Custom Cursor Component */}
+      <CustomCursor />
+
+      {/* Resume Viewer Modal */}
+      <ResumeModal 
+        isOpen={showResumeModal}
+        onClose={() => setShowResumeModal(false)}
+        isDarkMode={isDarkMode}
       />
-      {echoes.map(echo => (
-        <div 
-          key={echo.id} 
-          className="cursor-echo" 
-          style={{ left: echo.x, top: echo.y }} 
-        />
-      ))}
     </div>
   );
 }

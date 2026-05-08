@@ -122,6 +122,12 @@ export default function WinBot({ isDarkMode }) {
     }, 600 + Math.random() * 400);
   };
 
+  const handleClearChat = () => {
+    setMessages([
+      { text: "Hi! I'm WinBot 🤖. Ask me anything about Win's portfolio!", isBot: true }
+    ]);
+  };
+
   return (
     <>
       {/* Floating Toggle Button */}
@@ -169,14 +175,25 @@ export default function WinBot({ isDarkMode }) {
                   </p>
                 </div>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
-                  isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-gray-500 hover:text-black hover:bg-gray-200'
-                }`}
-              >
-                <i className="fas fa-times text-sm" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button 
+                  onClick={handleClearChat}
+                  title="Clear Chat"
+                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
+                    isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-gray-500 hover:text-black hover:bg-gray-200'
+                  }`}
+                >
+                  <i className="fas fa-trash-alt text-[11px]" />
+                </button>
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
+                    isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-gray-500 hover:text-black hover:bg-gray-200'
+                  }`}
+                >
+                  <i className="fas fa-times text-sm" />
+                </button>
+              </div>
             </div>
 
             {/* Messages Area */}
