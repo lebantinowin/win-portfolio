@@ -105,13 +105,20 @@ export default function ProjectModal({ project, isDarkMode, onClose, t }) {
         </div>
 
         <div className="p-8">
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-4">
             {project.tags.map((tag, i) => (
               <span key={i} className="bg-primary/20 text-primary text-sm font-semibold px-3 py-1 rounded-full">
                 {tag}
               </span>
             ))}
           </div>
+
+          {project.date && (
+            <div className={`flex items-center gap-2 mb-6 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              <i className="fas fa-calendar-alt text-primary text-xs"></i>
+              <span>{project.date}</span>
+            </div>
+          )}
 
           {/* Problem / Solution Callouts */}
           {(project.problem || project.solution) && (
@@ -146,7 +153,7 @@ export default function ProjectModal({ project, isDarkMode, onClose, t }) {
           )}
 
           <h3 className="text-xl font-semibold mb-4">Overview</h3>
-          <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} leading-relaxed mb-8 text-lg whitespace-pre-wrap`}>
+          <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} leading-relaxed mb-8 text-base whitespace-pre-wrap text-justify`}>
             {project.detailedDescription || project.description}
           </div>
 
