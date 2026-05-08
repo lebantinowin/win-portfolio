@@ -54,7 +54,7 @@ function App() {
       aboutTitle: 'About Me',
       aboutP1: "I work mostly in full-stack web development — React, Laravel, and MySQL are my main tools.",
       aboutP2: "I care about building things that actually work and are easy to use. Whether it's a website, a design, or a system — I want it to solve a real problem.",
-      aboutP3: "I’m currently available for full-time remote or freelance work and am always open to new opportunities.",
+      aboutP3: "I’m currently available for full-time, remote or freelance work and am always open to new opportunities.",
       years: 'Years',
       projects: 'Projects',
       clients: 'Clients',

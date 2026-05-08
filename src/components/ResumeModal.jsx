@@ -28,7 +28,7 @@ export default function ResumeModal({ isOpen, onClose, isDarkMode }) {
               </h2>
               <div className="flex items-center gap-3">
                 <a 
-                  href="https://drive.google.com/file/d/1yTQ4xaqObAOddWNjeGOVBpC6jZgB51mG/view?usp=drive_link" 
+                  href="https://drive.google.com/file/d/1CaUNz6xRAbYZ4IQN-I8L8NYPogz7NfNb/view?usp=drive_link" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="bg-primary hover:bg-primary-hover text-white px-4 py-1.5 rounded-full text-sm font-semibold transition-colors flex items-center gap-2"
@@ -49,7 +49,7 @@ export default function ResumeModal({ isOpen, onClose, isDarkMode }) {
             {/* PDF Frame */}
             <div className="flex-1 w-full relative bg-gray-100 dark:bg-gray-800">
               <iframe 
-                src="https://drive.google.com/file/d/1yTQ4xaqObAOddWNjeGOVBpC6jZgB51mG/preview" 
+                src="https://drive.google.com/file/d/1CaUNz6xRAbYZ4IQN-I8L8NYPogz7NfNb/preview" 
                 className="absolute inset-0 w-full h-full border-none"
                 title="Resume PDF"
                 allow="autoplay"

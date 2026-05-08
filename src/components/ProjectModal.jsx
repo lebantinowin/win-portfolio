@@ -113,6 +113,38 @@ export default function ProjectModal({ project, isDarkMode, onClose, t }) {
             ))}
           </div>
 
+          {/* Problem / Solution Callouts */}
+          {(project.problem || project.solution) && (
+            <div className="grid sm:grid-cols-2 gap-4 mb-8">
+              {project.problem && (
+                <div className={`rounded-2xl p-5 border-l-4 border-red-500 ${isDarkMode ? 'bg-red-500/10' : 'bg-red-50'}`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-7 h-7 rounded-full bg-red-500/20 flex items-center justify-center">
+                      <i className="fas fa-exclamation text-red-500 text-xs"></i>
+                    </span>
+                    <span className="text-red-500 font-bold text-sm uppercase tracking-wider">Problem</span>
+                  </div>
+                  <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    {project.problem}
+                  </p>
+                </div>
+              )}
+              {project.solution && (
+                <div className={`rounded-2xl p-5 border-l-4 border-primary ${isDarkMode ? 'bg-primary/10' : 'bg-primary/5'}`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center">
+                      <i className="fas fa-lightbulb text-primary text-xs"></i>
+                    </span>
+                    <span className="text-primary font-bold text-sm uppercase tracking-wider">Solution</span>
+                  </div>
+                  <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    {project.solution}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           <h3 className="text-xl font-semibold mb-4">Overview</h3>
           <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} leading-relaxed mb-8 text-lg whitespace-pre-wrap`}>
             {project.detailedDescription || project.description}
