@@ -759,7 +759,7 @@ function App() {
                 )}
                 <div className="p-4 md:p-6 flex flex-col flex-grow">
                   <h3 className={`text-lg md:text-xl font-bold mb-2 md:mb-3 line-clamp-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>{project.title}</h3>
-                  <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'} text-sm md:text-base mb-3 md:mb-4 leading-relaxed line-clamp-3`}>{project.description}</p>
+                  <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'} text-sm md:text-base mb-3 md:mb-4 leading-relaxed line-clamp-3 text-justify`}>{project.description}</p>
                   <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4">
                     {project.tags.map((tag, i) => (
                       <span key={i} className="bg-primary/20 text-secondary text-xs font-semibold px-3 py-1 rounded-full">
