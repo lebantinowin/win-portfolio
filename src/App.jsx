@@ -349,7 +349,9 @@ function App() {
       images: [
         '/Eccentri TS Screenshots/Screenshot 2026-05-04 194042.png',
         '/Eccentri TS Screenshots/Screenshot 2026-05-04 193333.png',
-        '/Eccentri TS Screenshots/Screenshot 2026-05-04 193314.png'
+        '/Eccentri TS Screenshots/Screenshot 2026-05-04 193314.png',
+        '/Eccentri TS Screenshots/488030332_640419532178826_2312955363910706476_n.jpg',
+        '/Eccentri TS Screenshots/686201781_122127307233171555_7725823393787197059_n.jpg'
       ]
     },
     {
@@ -365,7 +367,8 @@ function App() {
       image: '/SpectaQR Screenshots/Screenshot 2026-05-04 200705.png',
       images: [
         '/SpectaQR Screenshots/Screenshot 2026-05-04 200705.png',
-        '/SpectaQR Screenshots/Screenshot 2026-05-04 200643.png'
+        '/SpectaQR Screenshots/Screenshot 2026-05-04 200643.png',
+        '/SpectaQR Screenshots/561761280_122200902206297650_7664125425968660942_n.jpg'
       ]
     },
     {
@@ -383,7 +386,9 @@ function App() {
         '/Warzone Screesnshots/Screenshot 2026-05-08 075815.png',
         '/Warzone Screesnshots/Screenshot 2026-05-08 075950.png',
         '/Warzone Screesnshots/Screenshot 2026-05-08 080013.png',
-        '/Warzone Screesnshots/Screenshot 2026-05-08 080113.png'
+        '/Warzone Screesnshots/Screenshot 2026-05-08 080113.png',
+        '/Warzone Screesnshots/610635729_1811623392827404_5329899526018116754_n.jpg',
+        '/Warzone Screesnshots/611285996_882193690964185_1339562058082809289_n.jpg'
       ]
     }
   ];
