@@ -23,8 +23,8 @@ const BOT_KNOWLEDGE = [
     response: "Win is a full-stack developer! His main tech stack includes React, Laravel, PHP, MySQL, Tailwind CSS, JavaScript, and Vite. He builds robust, modern web applications from frontend to backend."
   },
   {
-    keywords: ['project', 'projects', 'work', 'portfolio', 'tabulation', 'spectaqr', 'warzone'],
-    response: "Win has three featured projects right now: 1) A Laravel-based Tabulation System for competitive events, 2) SectaQR, a QR-based attendance management system, and 3) Warzone Gym CRM, an AI-powered fitness coaching platform!"
+    keywords: ['project', 'projects', 'work', 'portfolio', 'tabulation', 'spectaqr', 'warzone', 'nexus'],
+    response: "Win has four featured projects right now: 1) A Laravel Tabulation System, 2) SectaQR attendance system, 3) Warzone Gym CRM, and 4) Nexus League, a tournament bracket manager!"
   },
   {
     keywords: ['contact', 'email', 'hire', 'reach', 'message'],
@@ -133,20 +133,34 @@ export default function WinBot({ isDarkMode }) {
       {/* Floating Toggle Button */}
       <motion.button
         initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        whileHover={{ scale: 1.1 }}
+        animate={{ 
+          scale: [1, 1.05, 1],
+          y: [0, -4, 0]
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        whileHover={{ scale: 1.15, transition: { duration: 0.2 } }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 w-10 h-10 rounded-full shadow-2xl flex items-center justify-center z-50 transition-colors ${
+        className={`fixed bottom-6 right-6 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center z-50 transition-opacity duration-300 ${
           isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'
-        } ${isDarkMode ? 'bg-primary text-white hover:bg-primary-hover' : 'bg-primary text-white hover:bg-primary-hover'}`}
-        style={{ boxShadow: '0 8px 32px rgba(59, 130, 246, 0.4)' }}
+        } bg-transparent`}
       >
-        <i className="fas fa-robot text-lg" />
+        <img 
+          src="/winbotchibi.svg" 
+          alt="WinBot" 
+          className="w-full h-full object-contain drop-shadow-2xl hover:drop-shadow-[0_8px_32px_rgba(59,130,246,0.6)] transition-all" 
+        />
         
         {/* Unread dot indicator */}
         {messages.length === 1 && (
-          <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white dark:border-black rounded-full animate-pulse" />
+          <span className="absolute top-1 right-1 md:top-2 md:right-2 flex h-4 w-4">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-white dark:border-black"></span>
+          </span>
         )}
       </motion.button>
 
@@ -165,8 +179,8 @@ export default function WinBot({ isDarkMode }) {
             {/* Header */}
             <div className={`px-4 py-3 flex justify-between items-center ${isDarkMode ? 'bg-gray-800 border-b border-gray-700' : 'bg-gray-50 border-b border-gray-200'}`}>
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
-                  <i className="fas fa-robot text-sm" />
+                <div className="w-10 h-10 flex items-center justify-center -ml-1">
+                  <img src="/winbotchibi.svg" alt="WinBot" className="w-full h-full object-contain drop-shadow-md" />
                 </div>
                 <div>
                   <h3 className={`font-bold text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>WinBot</h3>

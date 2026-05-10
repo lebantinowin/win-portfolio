@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Sidebar from './components/Sidebar';
 import Marquee from './components/Marquee';
@@ -34,6 +34,65 @@ function App() {
   const [emailForm, setEmailForm] = useState({ name: '', email: '', message: '' });
   const [emailStatus, setEmailStatus] = useState({ sending: false, success: false, error: null });
   const [showShoulderFigures, setShowShoulderFigures] = useState(false);
+
+  // Desktop carousel ref + drag-to-scroll
+  const projectsCarouselRef = useRef(null);
+  const dragState = useRef({ isDown: false, startX: 0, scrollLeft: 0 });
+  const onCarouselMouseDown = (e) => {
+    dragState.current.isDown = true;
+    dragState.current.startX = e.pageX - projectsCarouselRef.current.offsetLeft;
+    dragState.current.scrollLeft = projectsCarouselRef.current.scrollLeft;
+    projectsCarouselRef.current.style.cursor = 'grabbing';
+  };
+  const onCarouselMouseLeave = () => {
+    dragState.current.isDown = false;
+    if (projectsCarouselRef.current) projectsCarouselRef.current.style.cursor = 'grab';
+  };
+  const onCarouselMouseUp = () => {
+    dragState.current.isDown = false;
+    if (projectsCarouselRef.current) projectsCarouselRef.current.style.cursor = 'grab';
+  };
+  const onCarouselMouseMove = (e) => {
+    if (!dragState.current.isDown) return;
+    e.preventDefault();
+    const x = e.pageX - projectsCarouselRef.current.offsetLeft;
+    const walk = (x - dragState.current.startX) * 1.5;
+    projectsCarouselRef.current.scrollLeft = dragState.current.scrollLeft - walk;
+  };
+
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (projectsCarouselRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = projectsCarouselRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
+    }
+  };
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, []);
+
+  // Carousel Autoplay
+  const isHovered = useRef(false);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isHovered.current && !dragState.current.isDown && projectsCarouselRef.current) {
+        const el = projectsCarouselRef.current;
+        const maxScroll = el.scrollWidth - el.clientWidth;
+        if (el.scrollLeft >= maxScroll - 10) {
+          el.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          el.scrollBy({ left: el.clientWidth / 3 + 24, behavior: 'smooth' });
+        }
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const greetingsByLanguage = {
     english: 'Hi,',
@@ -390,6 +449,19 @@ function App() {
         '/Warzone Screesnshots/610635729_1811623392827404_5329899526018116754_n.jpg',
         '/Warzone Screesnshots/611285996_882193690964185_1339562058082809289_n.jpg'
       ]
+    },
+    {
+      id: 4,
+      title: 'Nexus - Bracket Manager',
+      description: 'A full-stack web application for creating and managing tournament brackets with real-time score tracking. Supports Single Elimination, Double Elimination, and Round Robin formats with PDF export capabilities.',
+      date: 'Ongoing',
+      problem: 'Organizers managing sports or gaming tournaments lack a dedicated, flexible tool to create structured brackets, track live match results, and export professional tournament documentation in one place.',
+      solution: 'Nexus League provides an end-to-end tournament management experience — from team registration and format selection to bracket generation, live score entry, and PDF/CSV export — all in a clean, browser-based interface backed by a MySQL persistence layer.',
+      detailedDescription: "Nexus League is a browser-based tournament management platform built for organizers who need a reliable, professional tool to run competitions from start to finish.\n\nDashboard & Tournament Creation — Organizers start by entering a tournament name, organizer identity, and optional description. The app routes them through a guided multi-step flow.\n\nTeam Management — Add, edit, remove, and seed teams dynamically before bracket generation. All team data is validated and stored before advancing to bracket generation.\n\nFormat Selection — Choose between three bracket formats: Single Elimination, Double Elimination, and Round Robin. The engine auto-generates all rounds and matches based on the number of registered teams.\n\nGraphical Bracket Tree — Matches are rendered as a visual, hierarchical tree with SVG connectors for a professional tournament feel — similar to what you'd see in major esports events.\n\nMatch List Display — A linear list view of all matches with status indicators (Scheduled / In-Progress / Completed) for at-a-glance progress tracking.\n\nLive Score Entry — An edit mode allows organizers to record scores per match; winners auto-advance through the bracket in real time.\n\nExport — Bracket data can be exported as a PDF report or CSV file for sharing, archiving, and printing.\n\nPersistence — A MySQL (nexus_league) database with a hybrid schema stores essential metadata relationally while persisting the full bracket JSON in a LONGTEXT column for flexibility and quick retrieval.\n\nState Management — Zustand store handles all tournament state client-side, with localStorage as a fallback layer for offline resilience.",
+      tags: ['React', 'TypeScript', 'Tailwind', 'Vite','Node.js', 'Express', 'MySQL'],
+      github: 'https://github.com/lebantinowin/Bracketing-System',
+      image: null,
+      images: []
     }
   ];
 
@@ -623,7 +695,7 @@ function App() {
           </h2>
           
           {/* Centered Paragraphs */}
-          <div className="space-y-6 mb-20 text-center">
+          <div className="space-y-6 mb-20 text-justify mx-auto max-w-3xl">
             <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-lg leading-relaxed`}>
               {t.aboutP1}
             </p>
@@ -743,49 +815,133 @@ function App() {
           <h2 className={`text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 ${isDarkMode ? 'text-white' : 'text-black'}`}>
             <i className="fas fa-code text-primary mr-2"></i> {t.featuredProjects}
           </h2>
-          <div 
-            className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 snap-x snap-mandatory pb-8 -mx-5 px-5 md:mx-0 md:px-0 md:pb-0 scroll-smooth"
+
+          {/* ── Mobile: horizontal swipe ── */}
+          <div
+            className="flex md:hidden overflow-x-auto gap-6 snap-x snap-mandatory pb-8 -mx-5 px-5 scroll-smooth"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {projects.map(project => (
               <div
                 key={project.id}
-                className="w-[85vw] sm:w-[350px] md:w-auto shrink-0 snap-center bg-primary/5 border border-gray-800 rounded-xl hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col group"
+                className="w-[85vw] sm:w-[350px] shrink-0 snap-center bg-primary/5 border border-gray-800 rounded-xl hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col group"
               >
-                {project.image && (
+                {project.image ? (
                   <div className="h-48 overflow-hidden">
                     <img src={project.image} alt={project.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   </div>
+                ) : (
+                  <div className="h-48 flex flex-col items-center justify-center bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-b border-gray-800">
+                    <i className="fas fa-camera text-3xl text-primary/40 mb-2"></i>
+                    <span className="text-xs font-semibold tracking-widest uppercase text-gray-500">Screenshots Coming Soon</span>
+                  </div>
                 )}
-                <div className="p-4 md:p-6 flex flex-col flex-grow">
-                  <h3 className={`text-lg md:text-xl font-bold mb-2 md:mb-3 line-clamp-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>{project.title}</h3>
-                  <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'} text-sm md:text-base mb-3 md:mb-4 leading-relaxed line-clamp-3 text-justify`}>{project.description}</p>
-                  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4">
+                <div className="p-4 flex flex-col flex-grow">
+                  <h3 className={`text-lg font-bold mb-2 line-clamp-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>{project.title}</h3>
+                  <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'} text-sm mb-3 leading-relaxed line-clamp-3 text-justify`}>{project.description}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-4">
                     {project.tags.map((tag, i) => (
-                      <span key={i} className="bg-primary/20 text-secondary text-xs font-semibold px-3 py-1 rounded-full">
-                        {tag}
-                      </span>
+                      <span key={i} className="bg-primary/20 text-secondary text-xs font-semibold px-3 py-1 rounded-full">{tag}</span>
                     ))}
                   </div>
-                  <button 
-                    onClick={() => setSelectedProject(project)} 
-                    className="mt-auto self-start inline-flex items-center gap-2 text-xs font-semibold text-primary hover:text-primary/70 transition-all duration-200"
-                  >
-                    View Project
-                    <i className="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                  <button onClick={() => setSelectedProject(project)} className="mt-auto self-start inline-flex items-center gap-2 text-xs font-semibold text-primary hover:text-primary/70 transition-all duration-200">
+                    View Project <i className="fas fa-arrow-up-right-from-square text-[10px]"></i>
                   </button>
                 </div>
               </div>
             ))}
           </div>
-          
-          {/* Mobile Swipe Indicator */}
+
+          {/* Mobile swipe indicator */}
           <div className="md:hidden flex justify-center mt-4">
             <div className={`flex items-center gap-3 px-4 py-2 rounded-full ${isDarkMode ? 'bg-white/5 text-gray-300' : 'bg-black/5 text-gray-600'}`}>
               <i className="fas fa-chevron-left text-[10px] opacity-40"></i>
               <span className="text-xs font-medium tracking-wide">Swipe to explore</span>
               <i className="fas fa-chevron-right text-[10px] opacity-80 animate-pulse"></i>
             </div>
+          </div>
+
+          {/* ── Desktop: carousel with arrow buttons ── */}
+          <div className="hidden md:flex items-center gap-3">
+
+            {/* Prev */}
+            <button
+              onClick={() => {
+                const el = projectsCarouselRef.current;
+                if (el) el.scrollBy({ left: -(el.clientWidth / 3 + 24), behavior: 'smooth' });
+              }}
+              className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300
+                ${isDarkMode ? 'border-gray-700 bg-black/60 text-white hover:bg-primary hover:border-primary' : 'border-gray-300 bg-white text-black hover:bg-primary hover:border-primary hover:text-white'}
+                shadow-md hover:scale-110 ${!canScrollLeft ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+              aria-label="Previous projects"
+              tabIndex={!canScrollLeft ? -1 : 0}
+            >
+              <i className="fas fa-chevron-left text-xs"></i>
+            </button>
+
+            {/* Carousel track */}
+            <div
+              ref={projectsCarouselRef}
+              className="flex flex-1 overflow-x-auto gap-6 snap-x snap-mandatory pb-4 scroll-smooth select-none scrollbar-hide"
+              style={{ cursor: 'grab' }}
+              onMouseEnter={() => { isHovered.current = true; }}
+              onMouseDown={onCarouselMouseDown}
+              onMouseLeave={(e) => {
+                isHovered.current = false;
+                onCarouselMouseLeave(e);
+              }}
+              onTouchStart={() => { isHovered.current = true; }}
+              onTouchEnd={() => { isHovered.current = false; }}
+              onMouseUp={onCarouselMouseUp}
+              onMouseMove={onCarouselMouseMove}
+              onScroll={checkScroll}
+            >
+              {projects.map(project => (
+                <div
+                  key={project.id}
+                  className="w-[calc(33.333%-1rem)] shrink-0 snap-start bg-primary/5 border border-gray-800 rounded-xl hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col group"
+                >
+                  {project.image ? (
+                    <div className="h-48 overflow-hidden">
+                      <img src={project.image} alt={project.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                    </div>
+                  ) : (
+                    <div className="h-48 flex flex-col items-center justify-center bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-b border-gray-800">
+                      <i className="fas fa-camera text-3xl text-primary/40 mb-2"></i>
+                      <span className="text-xs font-semibold tracking-widest uppercase text-gray-500">Screenshots Coming Soon</span>
+                    </div>
+                  )}
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h3 className={`text-xl font-bold mb-3 line-clamp-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>{project.title}</h3>
+                    <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-700'} text-base mb-4 leading-relaxed line-clamp-3 text-justify`}>{project.description}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tags.map((tag, i) => (
+                        <span key={i} className="bg-primary/20 text-secondary text-xs font-semibold px-3 py-1 rounded-full">{tag}</span>
+                      ))}
+                    </div>
+                    <button onClick={() => setSelectedProject(project)} className="mt-auto self-start inline-flex items-center gap-2 text-xs font-semibold text-primary hover:text-primary/70 transition-all duration-200">
+                      View Project <i className="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Next */}
+            <button
+              onClick={() => {
+                const el = projectsCarouselRef.current;
+                if (el) el.scrollBy({ left: el.clientWidth / 3 + 24, behavior: 'smooth' });
+              }}
+              className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300
+                ${isDarkMode ? 'border-gray-700 bg-black/60 text-white hover:bg-primary hover:border-primary' : 'border-gray-300 bg-white text-black hover:bg-primary hover:border-primary hover:text-white'}
+                shadow-md hover:scale-110 ${!canScrollRight ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+              aria-label="Next projects"
+              tabIndex={!canScrollRight ? -1 : 0}
+            >
+              <i className="fas fa-chevron-right text-xs"></i>
+            </button>
+
           </div>
         </div>
       </section>
@@ -1436,7 +1592,7 @@ function App() {
             exit={{ opacity: 0, scale: 0.5, y: 20 }}
             transition={{ duration: 0.3 }}
             onClick={scrollToTop}
-            className="fixed bottom-20 right-6 w-10 h-10 bg-primary text-black rounded-full flex items-center justify-center shadow-xl z-40 group"
+            className="fixed bottom-28 md:bottom-32 right-6 w-10 h-10 bg-primary text-black rounded-full flex items-center justify-center shadow-xl z-40 group"
             title="Scroll to top"
           >
             <i className="fas fa-chevron-up transition-transform duration-300 group-hover:scale-110"></i>
