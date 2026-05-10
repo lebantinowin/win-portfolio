@@ -79,15 +79,32 @@ function App() {
 
   // Carousel Autoplay
   const isHovered = useRef(false);
+  const mobileCarouselRef = useRef(null);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!isHovered.current && !dragState.current.isDown && projectsCarouselRef.current) {
-        const el = projectsCarouselRef.current;
-        const maxScroll = el.scrollWidth - el.clientWidth;
-        if (el.scrollLeft >= maxScroll - 10) {
-          el.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          el.scrollBy({ left: el.clientWidth / 3 + 24, behavior: 'smooth' });
+      if (!isHovered.current && !dragState.current.isDown) {
+        // Desktop
+        if (projectsCarouselRef.current && projectsCarouselRef.current.clientWidth > 0) {
+          const el = projectsCarouselRef.current;
+          const maxScroll = el.scrollWidth - el.clientWidth;
+          if (el.scrollLeft >= maxScroll - 10) {
+            el.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            el.scrollBy({ left: el.clientWidth / 3 + 24, behavior: 'smooth' });
+          }
+        }
+        // Mobile
+        if (mobileCarouselRef.current && mobileCarouselRef.current.clientWidth > 0) {
+          const el = mobileCarouselRef.current;
+          const maxScroll = el.scrollWidth - el.clientWidth;
+          if (el.scrollLeft >= maxScroll - 10) {
+            el.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            const firstCard = el.children[0];
+            const scrollAmount = firstCard ? firstCard.clientWidth + 24 : el.clientWidth;
+            el.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+          }
         }
       }
     }, 3000);
@@ -818,8 +835,11 @@ function App() {
 
           {/* ── Mobile: horizontal swipe ── */}
           <div
-            className="flex md:hidden overflow-x-auto gap-6 snap-x snap-mandatory pb-8 -mx-5 px-5 scroll-smooth"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            ref={mobileCarouselRef}
+            className="flex md:hidden overflow-x-auto gap-6 snap-x snap-mandatory pb-8 -mx-5 px-5 scroll-smooth scrollbar-hide"
+            onTouchStart={() => { isHovered.current = true; }}
+            onTouchEnd={() => { isHovered.current = false; }}
+            onTouchCancel={() => { isHovered.current = false; }}
           >
             {projects.map(project => (
               <div
@@ -892,6 +912,7 @@ function App() {
               }}
               onTouchStart={() => { isHovered.current = true; }}
               onTouchEnd={() => { isHovered.current = false; }}
+              onTouchCancel={() => { isHovered.current = false; }}
               onMouseUp={onCarouselMouseUp}
               onMouseMove={onCarouselMouseMove}
               onScroll={checkScroll}
